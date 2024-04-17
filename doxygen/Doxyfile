@@ -1,0 +1,47 @@
+# Doxyfile 1.9.1
+
+DOXYFILE_ENCODING      = UTF-8
+PROJECT_NAME           = "fem"
+PROJECT_NUMBER         = "0.1"
+PROJECT_BRIEF          = "FEM code."
+
+OUTPUT_DIRECTORY       = "../docs"
+
+GENERATE_HTML          = YES
+HTML_OUTPUT            = html
+GENERATE_LATEX         = YES
+
+# ファイルのパス名
+FULL_PATH_NAMES        = YES
+STRIP_FROM_PATH        = /home/naoyaimai/github-utokyo
+
+INPUT                  = ../. \
+                        # ../src \
+                        # ../src/include \
+                        # ../src/src-nompi \
+                        # ../src/src-mpi
+RECURSIVE              = YES
+FILE_PATTERNS          = *.cpp \
+                         *.h \
+                         *.md
+INLINE_SOURCES         = NO
+# EXTRACT_ALL = YES
+# why this is needed?
+EXCLUDE_PATTERNS       = */build/*
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = YES
+EXTRACT_STATIC         = YES
+EXTRACT_ANON_NSPACES   = YES
+# ソースコードをドキュメントに含めるか
+SOURCE_BROWSER         = YES
+
+# クラス図を作成する際にgraphvizを使うかどうか
+HAVE_DOT               = YES
+DOT_PATH               = /usr/bin/dot
+CALLER_GRAPH           = YES
+CALL_GRAPH             = YES
+
+ALPHABETICAL_INDEX     = YES
+
+MARKDOWN_SUPPORT       = YES
+
