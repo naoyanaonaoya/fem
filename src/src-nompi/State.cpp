@@ -1,4 +1,4 @@
-#include "State.h"
+#include "State.hpp"
 
 void State::reset() {
     t_ = 0;
