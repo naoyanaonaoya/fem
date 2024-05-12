@@ -2,10 +2,15 @@
 #define _ELEMENT_H_
 
 #include <iostream>
+#include <vector>
+
+#include "Node.hpp"
 
 class Element {
 
 protected:
+
+    int numberOfNodes_;
 
     //! element rank
     int rank;
@@ -21,6 +26,22 @@ protected:
 
     //! courant number
     double courantNumber_;
+
+    /**
+     * @brief Set the Rank object
+     * 
+     * @param rank 
+     */
+    virtual void setRank(const int &rank) {
+        this->rank = rank;
+    }
+
+    /**
+     * @brief Set the Nodes object
+     * 
+     * @param nodes 
+     */
+    virtual void setNodes(const std::vector<Node*>& nodes) = 0;
 
     /**
      * @fn
