@@ -8,28 +8,40 @@
 #ifndef _NODE_H_
 #define _NODE_H_
 
-#include <VectorXYZ.h>
+#include "ArrayXYZ.hpp"
 // #include <algorithm>
 #include <set>
 
 class Node {
     public:
+        
         //! node number from 0-index
         int global_index_;
+        
         //! node number from 0-index in the rank
         int local_index_;
 
         /// position of the node
-        VectorXYZ pos_;
+        ArrayXYZ pos_;
+        
         //! velocity of the node
-        VectorXYZ vel_;
+        ArrayXYZ vel_;
 
         //! concentrated mass
         double m_;
+        
         //! inverse of concentrated the mass
         double inv_m_;
+        
         //! delta_t / m
         double delta_t_by_m_;
+
+        Node(ArrayXYZ pos) {
+            pos_ = pos;
+            m_ = 0.0;
+            inv_m_ = 0.0;
+            delta_t_by_m_ = 0.0;
+        }
 
         /**
          * @fn
