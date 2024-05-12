@@ -5,9 +5,9 @@
 #include <sstream>
 #include <string>
 
-#include "DataException.h"
-#include "IoException.h"
-#include "Node.h"
+#include "DataException.hpp"
+#include "IoException.hpp"
+#include "Node.hpp"
 
 class FileReader {
 
