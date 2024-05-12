@@ -4,8 +4,7 @@
 #include <iostream>
 #include <cstring>
 #include <string>
-#include <cerrno>
-// macro for error conditions encountered in the standard library
+#include <cerrno> // macro for error conditions encountered in the standard library
 
 class IoException {
 
