@@ -2,8 +2,9 @@
 #include <cerrno>
 #include <cstring>
 #include <sstream>
-#include "FileReader.h"
-#include "Params.h"
+
+#include "FileReader.hpp"
+#include "Params.hpp"
 
 /**
  * @fn
