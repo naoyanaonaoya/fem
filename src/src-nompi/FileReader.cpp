@@ -1,5 +1,5 @@
-#include "FileReader.h"
-#include "Logger.h"
+#include "FileReader.hpp"
+#include "Logger.hpp"
 
 /**
  * @fn
