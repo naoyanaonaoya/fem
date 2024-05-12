@@ -14,6 +14,7 @@ private:
 
 public:
 
+    //! static member variable
     //! stream of the log
     //! Logger::out << "This is a log message." << std::endl;
     static std::fstream out;
