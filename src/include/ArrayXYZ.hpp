@@ -1,11 +1,11 @@
-#ifndef _VECTORXYZ_H_
-#define _VECTORXYZ_H_
+#ifndef _ARRAYXYZ_H_
+#define _ARRAYXYZ_H_
 
 #include <cmath>
 #include <iostream>
 #include <iomanip>
 
-class VectorXYZ {
+class ArrayXYZ {
 
 public:
 
@@ -18,7 +18,7 @@ public:
      * @param none
      * @return none
     */
-    VectorXYZ() {
+    ArrayXYZ() {
         x_ = 0.0;
         y_ = 0.0;
         z_ = 0.0;
@@ -32,7 +32,7 @@ public:
      * @param z double z component
      * @return none
     */
-    VectorXYZ(double x, double y, double z) {
+    ArrayXYZ(double x, double y, double z) {
         x_ = x;
         y_ = y;
         z_ = z;
@@ -41,10 +41,10 @@ public:
     /**
      * @fn
      * @brief copy constructor
-     * @param o VectorXYZ object
+     * @param o ArrayXYZ object
      * @return none
     */
-    VectorXYZ(const VectorXYZ &o) {
+    ArrayXYZ(const ArrayXYZ &o) {
         x_ = o.x_;
         y_ = o.y_;
         z_ = o.z_;
@@ -79,11 +79,11 @@ public:
     /**
      * @fn
      * @brief vector addition
-     * @param o VectorXYZ object
-     * @return VectorXYZ object
+     * @param o ArrayXYZ object
+     * @return ArrayXYZ object
     */
-    VectorXYZ operator+(const VectorXYZ &o) const {
-        VectorXYZ v;
+    ArrayXYZ operator+(const ArrayXYZ &o) const {
+        ArrayXYZ v;
         v.x_ = x_ + o.x_;
         v.y_ = y_ + o.y_;
         v.z_ = z_ + o.z_;
@@ -94,10 +94,10 @@ public:
      * @fn
      * @brief scalar addition
      * @param c double scalar
-     * @return VectorXYZ object
+     * @return ArrayXYZ object
     */
-    VectorXYZ operator+(const double &c) const {
-        VectorXYZ v;
+    ArrayXYZ operator+(const double &c) const {
+        ArrayXYZ v;
         v.x_ = x_ + c;
         v.y_ = y_ + c;
         v.z_ = z_ + c;
@@ -107,11 +107,11 @@ public:
     /**
      * @fn
      * @brief vector subtraction
-     * @param o VectorXYZ object
-     * @return VectorXYZ object
+     * @param o ArrayXYZ object
+     * @return ArrayXYZ object
     */
-    VectorXYZ operator-(const VectorXYZ &o) const {
-        VectorXYZ v;
+    ArrayXYZ operator-(const ArrayXYZ &o) const {
+        ArrayXYZ v;
         v.x_ = x_ - o.x_;
         v.y_ = y_ - o.y_;
         v.z_ = z_ - o.z_;
@@ -122,10 +122,10 @@ public:
      * @fn
      * @brief scalar subtraction
      * @param c double scalar
-     * @return VectorXYZ object
+     * @return ArrayXYZ object
     */
-    VectorXYZ operator-(const double &c) const {
-        VectorXYZ v;
+    ArrayXYZ operator-(const double &c) const {
+        ArrayXYZ v;
         v.x_ = x_ - c;
         v.y_ = y_ - c;
         v.z_ = z_ - c;
@@ -135,11 +135,11 @@ public:
     /**
      * @fn
      * @brief vector multiplication
-     * @param o VectorXYZ object
-     * @return VectorXYZ object
+     * @param o ArrayXYZ object
+     * @return ArrayXYZ object
     */
-    VectorXYZ operator*(const VectorXYZ &o) const {
-        VectorXYZ v;
+    ArrayXYZ operator*(const ArrayXYZ &o) const {
+        ArrayXYZ v;
         v.x_ = x_ * o.x_;
         v.y_ = y_ * o.y_;
         v.z_ = z_ * o.z_;
@@ -150,10 +150,10 @@ public:
      * @fn
      * @brief scalar multiplication
      * @param c double scalar
-     * @return VectorXYZ object
+     * @return ArrayXYZ object
     */
-    VectorXYZ operator*(const double &c) const {
-        VectorXYZ v;
+    ArrayXYZ operator*(const double &c) const {
+        ArrayXYZ v;
         v.x_ = x_ * c;
         v.y_ = y_ * c;
         v.z_ = z_ * c;
@@ -163,10 +163,10 @@ public:
     /**
      * @fn
      * @brief vector assignment
-     * @param o VectorXYZ object
-     * @return VectorXYZ object
+     * @param o ArrayXYZ object
+     * @return ArrayXYZ object
      */
-    VectorXYZ &operator=(const VectorXYZ &o) {
+    ArrayXYZ &operator=(const ArrayXYZ &o) {
         x_ = o.x_;
         y_ = o.y_;
         z_ = o.z_;
@@ -176,10 +176,10 @@ public:
     /**
      * @fn
      * @brief vector addition and assignment
-     * @param o VectorXYZ object
-     * @return VectorXYZ object
+     * @param o ArrayXYZ object
+     * @return ArrayXYZ object
      */
-    VectorXYZ &operator+=(const VectorXYZ &o) {
+    ArrayXYZ &operator+=(const ArrayXYZ &o) {
         x_ += o.x_;
         y_ += o.y_;
         z_ += o.z_;
@@ -190,9 +190,9 @@ public:
      * @fn
      * @brief scalar addition and assignment
      * @param c double scalar
-     * @return VectorXYZ object
+     * @return ArrayXYZ object
      */
-    VectorXYZ &operator+=(const double &c) {
+    ArrayXYZ &operator+=(const double &c) {
         x_ += c;
         y_ += c;
         z_ += c;
@@ -202,10 +202,10 @@ public:
     /**
      * @fn
      * @brief vector subtraction and assignment
-     * @param o VectorXYZ object
-     * @return VectorXYZ object
+     * @param o ArrayXYZ object
+     * @return ArrayXYZ object
      */
-    VectorXYZ &operator-=(const VectorXYZ &o) {
+    ArrayXYZ &operator-=(const ArrayXYZ &o) {
         x_ -= o.x_;
         y_ -= o.y_;
         z_ -= o.z_;
@@ -216,9 +216,9 @@ public:
      * @fn
      * @brief scalar subtraction and assignment
      * @param c double scalar
-     * @return VectorXYZ object
+     * @return ArrayXYZ object
      */
-    VectorXYZ &operator-=(const double &c) {
+    ArrayXYZ &operator-=(const double &c) {
         x_ -= c;
         y_ -= c;
         z_ -= c;
@@ -228,10 +228,10 @@ public:
     /**
      * @fn
      * @brief vector multiplication and assignment
-     * @param o VectorXYZ object
-     * @return VectorXYZ object
+     * @param o ArrayXYZ object
+     * @return ArrayXYZ object
      */
-    VectorXYZ &operator*=(const VectorXYZ &o) {
+    ArrayXYZ &operator*=(const ArrayXYZ &o) {
         x_ *= o.x_;
         y_ *= o.y_;
         z_ *= o.z_;
@@ -242,9 +242,9 @@ public:
      * @fn
      * @brief scalar multiplication and assignment
      * @param c double scalar
-     * @return VectorXYZ object
+     * @return ArrayXYZ object
      */
-    VectorXYZ &operator*=(const double &c) {
+    ArrayXYZ &operator*=(const double &c) {
         x_ *= c;
         y_ *= c;
         z_ *= c;
@@ -253,21 +253,21 @@ public:
 
     /**
      * @fn
-     * @brief VectorXYZ minus operator
-     * @param v VectorXYZ object
-     * @return VectorXYZ object
+     * @brief ArrayXYZ minus operator
+     * @param v ArrayXYZ object
+     * @return ArrayXYZ object
      */
-    inline VectorXYZ operator-(const VectorXYZ &v) {
+    inline ArrayXYZ operator-(const ArrayXYZ &v) {
         return v * -1.0;
     }
 
     /**
      * @fn
      * @brief inner product
-     * @param o VectorXYZ object
+     * @param o ArrayXYZ object
      * @return double
      */
-    double dot(const VectorXYZ &o) const {
+    double dot(const ArrayXYZ &o) const {
         double dot = x_ * o.x_ + y_ * o.y_ + z_ * o.z_;
         return dot;
     }
@@ -278,7 +278,7 @@ public:
      * @param none
      * @return double
      */
-    double L1Norm() const {
+    double NormL1() const {
         double l1norm = std::abs(x_) + std::abs(y_) + std::abs(z_);
         return l1norm;
     }
@@ -289,20 +289,20 @@ public:
      * @param none
      * @return double
      */
-    double L2Norm() const {
+    double NormL2() const {
         double l2norm = std::sqrt(x_ * x_ + y_ * y_ + z_ * z_);
         return l2norm;
     }
 
     /**
      * @fn
-     * @brief normalize VectorXYZ
+     * @brief normalize ArrayXYZ
      * @param none
-     * @return VectorXYZ object
+     * @return ArrayXYZ object
      */
-    VectorXYZ normalize() const {
-        double l2norm = L2Norm();
-        VectorXYZ v;
+    ArrayXYZ normalize() const {
+        double l2norm = NormL2();
+        ArrayXYZ v;
         v.clear();
         if (l2norm != 0.0) {
             v.x_ = x_ / l2norm;
@@ -321,9 +321,9 @@ public:
  * @brief scalar addition
  * @param c
  * @param v
- * @return VectorXYZ
+ * @return ArrayXYZ
  */
-inline VectorXYZ operator+(const double &c, const VectorXYZ &v) {
+inline ArrayXYZ operator+(const double &c, const ArrayXYZ &v) {
     return v + c;
 }
 
@@ -332,9 +332,9 @@ inline VectorXYZ operator+(const double &c, const VectorXYZ &v) {
  * @brief scalar subtraction
  * @param c
  * @param v
- * @return VectorXYZ
+ * @return ArrayXYZ
  */
-inline VectorXYZ operator-(const double &c, const VectorXYZ &v) {
+inline ArrayXYZ operator-(const double &c, const ArrayXYZ &v) {
     return v - c;
 }
 
@@ -343,20 +343,20 @@ inline VectorXYZ operator-(const double &c, const VectorXYZ &v) {
  * @brief scalar multiplication
  * @param c
  * @param v
- * @return VectorXYZ
+ * @return ArrayXYZ
  */
-inline VectorXYZ operator*(const double &c, const VectorXYZ &v) {
+inline ArrayXYZ operator*(const double &c, const ArrayXYZ &v) {
     return v * c;
 }
 
 /**
  * @fn
- * @brief output VectorXYZ
+ * @brief output ArrayXYZ
  * @param os
  * @param v
  * @return std::ostream
  */
-inline std::ostream& operator<<(std::ostream &os, const VectorXYZ &v) {
+inline std::ostream& operator<<(std::ostream &os, const ArrayXYZ &v) {
     // save the current format flags
     std::ios_base::fmtflags originalFlags = os.flags();
     std::streamsize originalPrecision = os.precision();
@@ -371,4 +371,4 @@ inline std::ostream& operator<<(std::ostream &os, const VectorXYZ &v) {
     return os;
 }
 
-#endif // _VECTORXYZ_H_
+#endif // _ARRAYXYZ_H_
