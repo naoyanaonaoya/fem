@@ -33,3 +33,7 @@
 
 build/*
 docs/*
+
+.cache/*
+.tags/*
+.tags
