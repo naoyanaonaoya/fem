@@ -13,7 +13,7 @@ GENERATE_LATEX         = YES
 
 # ファイルのパス名
 FULL_PATH_NAMES        = YES
-STRIP_FROM_PATH        = /home/naoyaimai/github-utokyo
+STRIP_FROM_PATH        = $(PWD)/../..
 
 INPUT                  = ../. \
                         # ../src \
@@ -22,6 +22,8 @@ INPUT                  = ../. \
                         # ../src/src-mpi
 RECURSIVE              = YES
 FILE_PATTERNS          = *.cpp \
+                         *.c \
+                         *.hpp \
                          *.h \
                          *.md
 INLINE_SOURCES         = NO
