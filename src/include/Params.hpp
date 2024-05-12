@@ -4,9 +4,9 @@
 #include <iostream>
 #include <string>
 
-#include "DataException.h"
-#include "IoException.h"
-#include "State.h"
+#include "DataException.hpp"
+#include "IoException.hpp"
+#include "State.hpp"
 
 class Params {
 
