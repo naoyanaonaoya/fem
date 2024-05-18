@@ -30,10 +30,12 @@ public:
      * 
      * @tparam Args 
      * @param args 
-     * @note Matrix<3, 3> m33_0(0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0);  
+     * @note Matrix<3, 3> m33_0(0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0);
+     * @note cant not like Matrix<3, 3> m33_0 = {0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0);
+     * @note because explicit
      */
     template<typename... Args>
-    Matrix<ROW, COL>(Args... args) : v_{{args...}} {
+    explicit Matrix<ROW, COL>(Args... args) : v_{{args...}} {
         static_assert(sizeof...(args) == ROW * COL, "The number of arguments must be equal to the size of the Matrix.");
         std::cout << "Matrix constructor1\n";
     }
@@ -41,8 +43,9 @@ public:
     /**
      * @brief Construct a new Matrix< N> object 
      * 
+     * @note Matrix<3, 3> v33_0();
      */
-    Matrix<ROW, COL>() {
+    explicit Matrix<ROW, COL>() {
         std::cout << "Matrix constructor0\n";
         static_assert(ROW > 0 && COL > 0, "Matrix dimensions must be greater than zero.");
     }
@@ -51,6 +54,7 @@ public:
      * @brief Return the number of elements in the matrix.
      *
      * @return 
+     * @note int numberOfElement = m33_0.size();
      */
     size_t size() const {
         return ROW * COL;
@@ -60,6 +64,7 @@ public:
      * @brief Return the number of row in the matrix.
      *
      * @return 
+     * @note int numberOFRow = m33_0.sizeRow();
      */
     size_t sizeRow() const {
         return ROW;
@@ -69,21 +74,32 @@ public:
      * @brief Return the number of col in the matrix.
      *
      * @return 
+     * @note int numberOfCol = m33_0.sizeCOL();
      */
     size_t sizeCol() const {
         return COL;
     }
 
+    /**
+     * @brief 
+     * @note m33_0.clear();
+     */
     void clear() {
         std::cout << "Matrix clear\n";
         for (std::size_t i = 0; i < ROW * COL; i++)
-            v_[i] = 0.0;
+            this->v_[i] = 0.0;
     }
 
+    /**
+     * @brief 
+     *
+     * @param value
+     * @note m33_0.set(3.0);
+     */
     void set(const double& value) {
         std::cout << "Matrix set " << value << "\n"; 
         for (std::size_t i = 0; i < ROW * COL; i++)
-            v_[i] = value;
+            this->v_[i] = value;
     }
 
     /**

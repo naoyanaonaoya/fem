@@ -31,7 +31,7 @@ public:
      * @note Array<2> a2_0(1.0, 2.0);
      */
     template<typename... Args>
-    Array<N>(Args... args) : v_{{args...}} {
+    explicit Array<N>(Args... args) : v_{{args...}} {
         static_assert(sizeof...(args) == N, "The number of arguments must be equal to the size of the Array.");
         std::cout << "Array constructor 1\n";
     }
@@ -41,7 +41,7 @@ public:
      * @note not initialize the member variables
      * @note Array<3> a3_0;
      */
-    Array<N>()
+    explicit Array<N>()
     {
         std::cout << "Array constructor 0\n";
         static_assert(N > 0, "Array dimensions must be greater than zero.");
