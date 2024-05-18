@@ -78,21 +78,21 @@ public:
 
     /**
      * @fn
-     * @brief vector addition
+     * @brief ArrayXYZ and ArrayXYZ addition
      * @param o ArrayXYZ object
      * @return ArrayXYZ object
     */
-    ArrayXYZ operator+(const ArrayXYZ &o) const {
+    ArrayXYZ operator+(const ArrayXYZ &other) const {
         ArrayXYZ v;
-        v.x_ = x_ + o.x_;
-        v.y_ = y_ + o.y_;
-        v.z_ = z_ + o.z_;
+        v.x_ = x_ + other.x_;
+        v.y_ = y_ + other.y_;
+        v.z_ = z_ + other.z_;
         return v;
     }
 
     /**
      * @fn
-     * @brief scalar addition
+     * @brief ArrayXYZ and scalar addition
      * @param c double scalar
      * @return ArrayXYZ object
     */
@@ -264,11 +264,11 @@ public:
     /**
      * @fn
      * @brief inner product
-     * @param o ArrayXYZ object
+     * @param other ArrayXYZ object
      * @return double
      */
-    double dot(const ArrayXYZ &o) const {
-        double dot = x_ * o.x_ + y_ * o.y_ + z_ * o.z_;
+    double dot(const ArrayXYZ &other) const {
+        double dot = x_ * other.x_ + y_ * other.y_ + z_ * other.z_;
         return dot;
     }
 
@@ -301,17 +301,32 @@ public:
      * @return ArrayXYZ object
      */
     ArrayXYZ normalize() const {
-        double l2norm = NormL2();
-        ArrayXYZ v;
-        v.clear();
+        double l2norm = this->NormL2();
+        ArrayXYZ result;
+        result.clear();
         if (l2norm != 0.0) {
-            v.x_ = x_ / l2norm;
-            v.y_ = y_ / l2norm;
-            v.z_ = z_ / l2norm;
-            return v;
+            result.x_ = this->x_ / l2norm;
+            result.y_ = this->y_ / l2norm;
+            result.z_ = this->z_ / l2norm;
+            return result;
         } else {
-            return v;
+            return result;
         }
+    }
+    
+    ArrayXYZ& normalize() {
+        double l2norm = this->NormL2();
+        if (l2norm != 0.0) {
+            double l2normInverse = 1.0 / l2norm;
+            this->x_ = this->x_ * l2normInverse; 
+            this->y_ = this->y_ * l2normInverse; 
+            this->z_ = this->z_ * l2normInverse; 
+        } else {
+            this->x_ = 0.0;
+            this->y_ = 0.0;
+            this->z_ = 0.0;
+        }
+        return *this;
     }
 };
 
