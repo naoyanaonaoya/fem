@@ -28,6 +28,7 @@ public:
      * v_{{args...}} : list initialization, uniform initialization
      * @tparam Args 
      * @param args 
+     * @note Array<2> a2_0(1.0, 2.0);
      */
     template<typename... Args>
     Array<N>(Args... args) : v_{{args...}} {
