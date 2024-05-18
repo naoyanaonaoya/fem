@@ -30,6 +30,7 @@ public:
      * 
      * @tparam Args 
      * @param args 
+     * @note Matrix<3, 3> m33_0(0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0);  
      */
     template<typename... Args>
     Matrix<ROW, COL>(Args... args) : v_{{args...}} {
@@ -86,6 +87,7 @@ public:
     }
 
     /**
+     * @fn
      * @brief Return the value of element.
      *
      * @param row
@@ -94,7 +96,7 @@ public:
      * @return 
      * @note mat(1, 2) = 5.0;
      */
-    double &operator()(std::size_t row, std::size_t col) {
+    double& operator()(std::size_t row, std::size_t col) {
         if (row < 0 || row >= ROW || col < 0 || col >= COL)
             throw std::out_of_range("Matrix index out of range");
         return v_[INDEX2D(ROW, COL, row, col)];
@@ -144,7 +146,7 @@ public:
 
     /**
      * @brief Matrix transpose in place 
-     * @note ~m44_0;
+     * @note !m44_0;
      */
     void operator!() {
         static_assert(ROW == COL, "Transopse in place is only applicable to square matrix.");
@@ -156,13 +158,14 @@ public:
     }
 
     /**
-     * @brief Matrix and matrix addition.
+     * @brief Matrix and Matrix addition.
      *
-     * @tparam o_row
-     * @tparam o_col
-     * @param other
+     * @tparam size_t o_row
+     * @tparam size_t o_col
+     * @param Matrix<ROW, COL> other
      *
-     * @return 
+     * @return Matrix<ROW, COL> result
+     * @note Matrix<4, 3> m43_2 = m43_0 + m43_1;
      */
     template <std::size_t o_row, std::size_t o_col>
     Matrix<ROW, COL> operator+(const Matrix<o_row, o_col> &other) const {
@@ -176,7 +179,7 @@ public:
     }
 
     /**
-     * @brief Matrix and matrix subtraction.
+     * @brief Matrix and Matrix subtraction.
      *
      * @tparam o_row
      * @tparam o_col
@@ -196,7 +199,7 @@ public:
     }
 
     /**
-     * @brief Matirx and matrix multiplication.
+     * @brief Matirx and Matrix multiplication.
      *
      * @tparam o_row
      * @tparam o_col
@@ -225,7 +228,7 @@ public:
     }
 
     /**
-     * @brief Matrix and matrix multiplication each elements.
+     * @brief Matrix and Matrix multiplication each elements.
      *
      * @tparam size_t o_row
      * @tparam size_t o_col
@@ -248,7 +251,7 @@ public:
 
     /**
      * @brief 
-     * Due to the properties of matrix multiplication,
+     * Due to the properties of Matrix multiplication,
      * the multiply-assign operator cannot be defined.
      * 
      */
@@ -334,7 +337,7 @@ public:
     
     
     /**
-     * @brief Matrix and scalar additino.
+     * @brief Matrix and scalar addition.
      *
      * @param s
      *
@@ -503,23 +506,65 @@ public:
 
 };
 
-
+/**
+ * @brief 
+ *
+ * @tparam size_t ROW
+ * @tparam size_t COL
+ * @param Matrix<ROW, COL> mat
+ *
+ * @return Matrix<ROW, COL> mat
+ * @note Matrix<3, 4> m34_1 = -m34_0;
+ * @note This template is need, because this is not inside of the calss definition.
+ */
 template <std::size_t ROW, std::size_t COL>
 inline static Matrix<ROW, COL> operator-(const Matrix<ROW, COL> &mat) {
     return mat * -1.0;
 }
 
-// this template is need, because this is not inside of the class definition.
+/**
+ * @brief scalar and Matrix addition.
+ *
+ * @tparam size_t ROW
+ * @tparam size_t COL
+ * @param scalar s
+ * @param Matrix<ROW, COL> mat
+ *
+ * @return Matrix<ROW, COL> mat
+ * @note Matri32_1 = sca + Matrix32_0;
+ */
 template <std::size_t ROW, std::size_t COL>
 inline static Matrix<ROW, COL> operator+(const double &s, const Matrix<ROW, COL> &mat) {
     return mat + s;
 }
 
+/**
+ * @brief scalar and Matrix subtraction.
+ *
+ * @tparam size_t ROW
+ * @tparam size_t COL
+ * @param scalar s
+ * @param Matrix<ROW, COL> mat
+ *
+ * @return Matrix<ROW, COL> mat
+ * @note Matrix<3, 4> m34_1 = sca - m34_0;
+ */
 template <std::size_t ROW, std::size_t COL>
 inline static Matrix<ROW, COL> operator-(const double &s, const Matrix<ROW, COL> &mat) {
     return -mat + s;
 }
 
+/**
+ * @brief scalar and Matrix multiplication
+ *
+ * @tparam size_t ROW
+ * @tparam size_t COL
+ * @param scalar s
+ * @param Matrix<ROW, COL> mat
+ *
+ * @return Matrix<ROW, COL>
+ * @note mat32_0 = sca * mat32_0;
+ */
 template <std::size_t ROW, std::size_t COL>
 inline static Matrix<ROW, COL> operator*(const double &s, const Matrix<ROW, COL> &mat) {
     return mat * s;
@@ -533,10 +578,22 @@ inline static double mult_col(const std::size_t& j, const Array<o_col>& arr, con
     return ret;
 }
 
+/**
+ * @brief Vector and Matrix multiplication. 
+ *
+ * @tparam size_t o_col
+ * @tparam size_t ROW
+ * @tparam size_t COL
+ * @param Array<o_col> arr
+ * @param Array<ROW, COL> mat
+ *
+ * @return Array<COL>
+ * @note Array<4> arr4_0 = arr3_0 * m34_0;
+ */
 template <std::size_t o_col, std::size_t ROW, std::size_t COL>
 inline static Array<COL> operator*(const Array<o_col>& arr, const Matrix<ROW, COL>& mat) {
     static_assert(o_col == ROW, "Array and Matrix multiplication must match for vector size and matrix row");
-
+    std::cout << "operator* array and matrix multiplicatoin\n";
     Array<COL> result;
     for (std::size_t j = 0; j < mat.sizeCol(); j++) {
        result[j] = mult_col(j, arr, mat); 
@@ -548,10 +605,10 @@ inline static Array<COL> operator*(const Array<o_col>& arr, const Matrix<ROW, CO
 /**
  * @brief Output the matrix elemetns.
  *
- * @tparam ROW
- * @tparam COL
+ * @tparam size_t ROW
+ * @tparam size_t COL
  * @param os
- * @param mat
+ * @param Array<ROW, COL> mat
  *
  * @return 
  * @note std::cout << mat32_0 << std::end;
