@@ -133,19 +133,33 @@ public:
         return v_[INDEX2D(ROW, COL, row, col)];
     }
 
-
     /**
      * @brief Update the matrix values using initializer list via operator().
      *
      * @param values
-     * @note m2_0({0.0, 1.0, 2.0, 3.0});
+     * @note m22_0.update({0.0, 1.0, 2.0, 3.0});
      */
-    void operator()(std::initializer_list<double> values) {
+    void update(std::initializer_list<double> values) {
+        std::cout << "Matrix update using initializer_list\n";
         if (values.size() != ROW * COL)
             throw std::invalid_argument("Initializer list must have exactly " + std::to_string(ROW * COL) + " elements.");
         std::copy(values.begin(), values.end(), v_.begin());
     }
-    
+
+    /**
+     * @brief Update the matrix values using parameter apck
+     *
+     * @tparam Args
+     * @param args
+     * @note m22_0.update(0.0, 1.0, 2.0, 3.0);
+     */
+    template<typename... Args>
+    void update(Args... args) {
+        std::cout << "Matrix update using template\n";
+        static_assert(sizeof...(args) == ROW * COL, "The number of arguments must be equal to the size of the Matrix.");
+        v_ = {args...};
+    }
+
     /**
      * @brief Matrix transpose
      *
