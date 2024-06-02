@@ -6,6 +6,7 @@
 #include "Element.hpp"
 #include "Array.hpp"
 #include "ArrayXYZ.hpp"
+#include <initializer_list>
 
 class ElementTri : public Element {
 
@@ -21,18 +22,18 @@ public:
 
     //! pointer to the three nodes
     Node *nodes_[3];
-    
+
     //! the three edge lengths
     int edge_length_[3];
 
     ArrayXYZ *edge_normals_[3];
 
 
-    ElementTri() {
-        this->numberOfNodes_ = 3;
-    }
+    ElementTri();
 
     void setNodes(const std::vector<Node*>& nodes) override;
+
+    void setNodes(const std::initializer_list<Node *> &nodes) override;
 
     void calcArea() override;
 
