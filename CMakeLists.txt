@@ -15,6 +15,9 @@ add_library(fem_base
     src/src-nompi/Params.cpp
     src/src-nompi/ElementTri.cpp
     src/src-nompi/ElementQuad.cpp
+    src/src-nompi/ErrorMessage.cpp
+    src/src-nompi/FileWriter.cpp
+    src/src-nompi/FileReader.cpp
 )
 
 message(STATUS "CMAKE_SOURCE_DIR: ${CMAKE_SOURCE_DIR}")
@@ -30,13 +33,19 @@ target_link_libraries(main fem_base)
 
 
 add_library(fem_test_base
-    src/src-nompi/TestBase.cpp
+    src/test/TestBase.cpp
 )
 
 target_link_libraries(fem_test_base fem_base)
 
-add_executable(test_Array src/src-nompi/test_Array.cpp)
+add_executable(test_Array src/test/test_Array.cpp)
 target_link_libraries(test_Array fem_test_base)
 
-add_executable(test_Matrix src/src-nompi/test_Matrix.cpp)
+add_executable(test_Matrix src/test/test_Matrix.cpp)
 target_link_libraries(test_Matrix fem_test_base)
+
+add_executable(test_State src/test/test_State.cpp)
+target_link_libraries(test_State fem_test_base)
+
+add_executable(test_ElementQuad src/test/test_ElementQuad.cpp)
+target_link_libraries(test_ElementQuad fem_test_base)
