@@ -4,6 +4,7 @@
 #include <cmath>
 #include <iostream>
 #include <iomanip>
+#include <stdexcept>
 
 class ArrayXYZ {
 
@@ -74,6 +75,30 @@ public:
         x_ = 0.0;
         y_ = 0.0;
         z_ = 0.0;
+    }
+
+    double& operator[](std::size_t index) {
+        std::cout << "ArrayXYZ call version.";
+        if (index < 0 || index >= 3)
+            throw std::out_of_range("ArrayXYZ index out of range.");
+        switch(index) {
+            case 0: return x_;
+            case 1: return y_;
+            case 2: return z_;
+            default: throw std::out_of_range("ArrayXYZ index out of range.");
+        }
+    }
+
+    double operator[](std::size_t index) const {
+        std::cout << "ArrayXYZ call const version.";
+        if (index < 0 || index >= 3)
+            throw std::out_of_range("ArrayXYZ index out of range.");
+        switch(index) {
+            case 0: return x_;
+            case 1: return y_;
+            case 2: return z_;
+            default: throw std::out_of_range("ArrayXYZ index out of range.");
+        }
     }
 
     /**
@@ -313,14 +338,14 @@ public:
             return result;
         }
     }
-    
+
     ArrayXYZ& normalize() {
         double l2norm = this->NormL2();
         if (l2norm != 0.0) {
             double l2normInverse = 1.0 / l2norm;
-            this->x_ = this->x_ * l2normInverse; 
-            this->y_ = this->y_ * l2normInverse; 
-            this->z_ = this->z_ * l2normInverse; 
+            this->x_ = this->x_ * l2normInverse;
+            this->y_ = this->y_ * l2normInverse;
+            this->z_ = this->z_ * l2normInverse;
         } else {
             this->x_ = 0.0;
             this->y_ = 0.0;

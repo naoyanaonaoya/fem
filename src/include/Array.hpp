@@ -26,8 +26,10 @@ public:
      * template<typename>>> Args> : variadic template
      * Args... args : Perfect forwarding
      * v_{{args...}} : list initialization, uniform initialization
-     * @tparam Args 
-     * @param args 
+     * @tparam Args
+     * @param args
+     * @note Args : template parameter pack. Containing the inferred type.
+     * @note args : function parameter pack. Containing the arguments.
      * @note Array<2> a2_0(1.0, 2.0);
      */
     template<typename... Args>
@@ -35,14 +37,13 @@ public:
         static_assert(sizeof...(args) == N, "The number of arguments must be equal to the size of the Array.");
         std::cout << "Array constructor 1\n";
     }
- 
+
     /**
      * @brief Construct a new Array N object
      * @note not initialize the member variables
      * @note Array<3> a3_0;
      */
-    explicit Array<N>()
-    {
+    explicit Array<N>() {
         std::cout << "Array constructor 0\n";
         static_assert(N > 0, "Array dimensions must be greater than zero.");
     }
@@ -72,7 +73,7 @@ public:
      *
      * @param i
      *
-     * @return 
+     * @return
      * @note a3[2] = 5.0;
      */
     double &operator[](size_t i) {
@@ -86,7 +87,7 @@ public:
      *
      * @param i
      *
-     * @return 
+     * @return
      * @note duuble balue = a3[2];;
      */
     double operator[](size_t i) const {
@@ -120,7 +121,7 @@ public:
     }
 
     /**
-     * @brief 
+     * @brief
      *
      * @tparam size_t M
      * @param Array<M> other
@@ -151,12 +152,12 @@ public:
     // }
 
     // /**
-    //  * @brief 
-    //  * 
-    //  * @tparam M 
-    //  * @param other 
+    //  * @brief
+    //  *
+    //  * @tparam M
+    //  * @param other
     //  * @return Array<N>&
-    //  * @note Array<3> a3_2 = a2_1; 
+    //  * @note Array<3> a3_2 = a2_1;
     //  */
     // template <std::size_t M>
     // Array<N>& operator=(const Array<M>& other) {
@@ -164,11 +165,11 @@ public:
     // }
 
     /**
-     * @brief Array and array addition. 
-     * 
-     * @tparam size_t M 
-     * @param Array<M> other 
-     * @return Array<N> 
+     * @brief Array and array addition.
+     *
+     * @tparam size_t M
+     * @param Array<M> other
+     * @return Array<N>
      * @note a3_2 = a3_0 + a3_1;
      */
     template <std::size_t M>
@@ -209,14 +210,24 @@ public:
      * @return Array<N>
      * @note a3_2 = a3_0 * a3_1;
      */
+    // template <std::size_t M>
+    // Array<N> operator*(const Array<M>& other) const {
+    //     static_assert(N == M, "Cannot subtract Arrays of different dimensions.");
+    //     std::cout << "Array operator *\n";
+    //     Array<N> result;
+    //     for (std::size_t i = 0; i < N; i++)
+    //         result[i] = this->v_[i] * other[i];
+    //     return result;
+    // }
+
     template <std::size_t M>
-    Array<N> operator*(const Array<M>& other) const {
+    double operator*(const Array<M>& other) const {
         static_assert(N == M, "Cannot subtract Arrays of different dimensions.");
         std::cout << "Array operator *\n";
-        Array<N> result;
+        double value = 0.0;
         for (std::size_t i = 0; i < N; i++)
-            result[i] = this->v_[i] * other[i];
-        return result;
+            value += this->v_[i] * other[i];
+        return value;
     }
 
     /**
