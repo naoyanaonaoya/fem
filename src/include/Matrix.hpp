@@ -12,9 +12,10 @@
 #define INDEX2D(row, col, i, j) (col * i + j)
 
 /**
- * @brief class for Matrix of N x N elements
- * 
- * @tparam N 
+ * @brief class for Matrix of ROW x COL elements
+ *
+ * @tparam size_t ROW
+ * @tparam size_t COL
  */
 template <std::size_t ROW, std::size_t COL>
 class Matrix {
@@ -26,13 +27,15 @@ private:
 public:
 
     /**
-     * @brief Construct a new Matrix< N> object
-     * 
-     * @tparam Args 
-     * @param args 
+     * @brief Construct a new Matrix<ROW, COL>
+     *
+     * @tparam Args
+     * @param args
      * @note Matrix<3, 3> m33_0(0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0);
-     * @note cant not like Matrix<3, 3> m33_0 = {0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0);
+     * @note cant not like Matrix<3, 3> m33_0 = {0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0};
      * @note because explicit
+     * @note Args : template parameter pack. Containing the inferred type.
+     * @note args : function parameter pack. Containing the arguments.
      */
     template<typename... Args>
     explicit Matrix<ROW, COL>(Args... args) : v_{{args...}} {
@@ -41,8 +44,8 @@ public:
     }
 
     /**
-     * @brief Construct a new Matrix< N> object 
-     * 
+     * @brief Construct a new Matrix< N> object
+     *
      * @note Matrix<3, 3> v33_0();
      */
     explicit Matrix<ROW, COL>() {
@@ -53,7 +56,7 @@ public:
     /**
      * @brief Return the number of elements in the matrix.
      *
-     * @return 
+     * @return
      * @note int numberOfElement = m33_0.size();
      */
     size_t size() const {
@@ -63,7 +66,7 @@ public:
     /**
      * @brief Return the number of row in the matrix.
      *
-     * @return 
+     * @return
      * @note int numberOFRow = m33_0.sizeRow();
      */
     size_t sizeRow() const {
@@ -73,7 +76,7 @@ public:
     /**
      * @brief Return the number of col in the matrix.
      *
-     * @return 
+     * @return
      * @note int numberOfCol = m33_0.sizeCOL();
      */
     size_t sizeCol() const {
@@ -81,7 +84,7 @@ public:
     }
 
     /**
-     * @brief 
+     * @brief
      * @note m33_0.clear();
      */
     void clear() {
@@ -91,13 +94,13 @@ public:
     }
 
     /**
-     * @brief 
+     * @brief
      *
      * @param value
      * @note m33_0.set(3.0);
      */
     void set(const double& value) {
-        std::cout << "Matrix set " << value << "\n"; 
+        std::cout << "Matrix set " << value << "\n";
         for (std::size_t i = 0; i < ROW * COL; i++)
             this->v_[i] = value;
     }
@@ -109,7 +112,7 @@ public:
      * @param row
      * @param col
      *
-     * @return 
+     * @return
      * @note mat(1, 2) = 5.0;
      */
     double& operator()(std::size_t row, std::size_t col) {
@@ -124,7 +127,7 @@ public:
      * @param row
      * @param col
      *
-     * @return 
+     * @return
      * @note double value = mat(1, 2);
      */
     double operator()(std::size_t row, std::size_t col) const {
@@ -175,7 +178,7 @@ public:
     }
 
     /**
-     * @brief Matrix transpose in place 
+     * @brief Matrix transpose in place
      * @note !m44_0;
      */
     void operator!() {
@@ -215,7 +218,7 @@ public:
      * @tparam o_col
      * @param other
      *
-     * @return 
+     * @return
      */
     template <std::size_t o_row, std::size_t o_col>
     Matrix<ROW, COL> operator-(const Matrix<o_row, o_col> &other) const {
@@ -280,24 +283,23 @@ public:
     }
 
     /**
-     * @brief 
+     * @brief
      * Due to the properties of Matrix multiplication,
      * the multiply-assign operator cannot be defined.
-     * 
+     *
      */
     template <std::size_t o_row, std::size_t o_col>
     [[deprecated("Matrix multiplication does not support the *= operator.")]]
     Matrix<ROW, o_col>& operator*=(const Matrix<o_row, o_col>& other) {
         std::cout << "matrix ooperator *=\n";
-        throw std::runtime_error(createErroeMessage("Matrix multiplication does not support the *= operator.", __FILE__, __LINE__));
-        
+        ErrorMessage err;
+        throw std::runtime_error(err.createErrorMessage("Matrix multiplication does not support the *= operator.", __FILE__, __LINE__));
         if (COL != other.getRowSize())
             throw std::invalid_argument("Matrix dimensions must match for multiplication.");
 
         Matrix<ROW, o_col> result;
         result.clear();
         result = (*this) * other;
-        
         // for (std::size_t i = 0; i < ROW; i++) {
         //     for (std::size_t j = 0; j < o_col; j++) {
         //         double sum = 0.0;
@@ -324,7 +326,7 @@ public:
     //     return *this;
     // }
 
-    
+
     /**
      * @brief Matrix and matrix additive assignments.
      *
