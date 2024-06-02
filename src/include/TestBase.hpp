@@ -19,7 +19,7 @@ private:
     static double tolerance_;
 
 public:
-    
+
     ~TestBase();
 
     TestBase();
@@ -30,8 +30,8 @@ public:
 
     /**
      * @brief write a report.
-     * 
-     * @return int 
+     *
+     * @return int
      */
     static int report();
 
@@ -45,67 +45,67 @@ public:
 
     /**
      * @brief double version
-     * 
-     * @param calculated_value 
-     * @param calculated_source 
-     * @param extpected_value 
-     * @param file 
-     * @param line 
+     *
+     * @param calculated_value
+     * @param calculated_source
+     * @param extpected_value
+     * @param file
+     * @param line
      */
     static void DoubleEqualsFunc(double calculated_value, const char *calculated_source, double extpected_value, const char *file, int line);
 
     /**
      * @brief int version
-     * 
-     * @param calculated_value 
-     * @param calculated_source 
-     * @param extpected_value 
-     * @param file 
-     * @param line 
+     *
+     * @param calculated_value
+     * @param calculated_source
+     * @param extpected_value
+     * @param file
+     * @param line
      */
     static void IntEqualsFunc(int calculated_value, const char *calculated_source, int extpected_value, const char *file, int line);
 
     /**
      * @brief size_t version
-     * 
-     * @param calculated_value 
-     * @param calculated_source 
-     * @param extpected_value 
-     * @param file 
-     * @param line 
+     *
+     * @param calculated_value
+     * @param calculated_source
+     * @param extpected_value
+     * @param file
+     * @param line
      */
     static void SizetEqualsFunc(std::size_t calculated_value, const char *calculated_source, std::size_t extpected_value, const char *file, int line);
 
     /**
      * @brief string version
-     * 
-     * @param calculated_value 
-     * @param calculated_source 
-     * @param extpected_value 
-     * @param file 
-     * @param line 
+     *
+     * @param calculated_value
+     * @param calculated_source
+     * @param extpected_value
+     * @param file
+     * @param line
      */
     static void StringEqualsFunc(const std::string &calculated_value, const char *calculated_source, const std::string &extpected_value, const char *file, int line);
 
     /**
      * @brief pointer version
-     * 
-     * @param calculated_value 
-     * @param calculated_source 
-     * @param extpected_value 
-     * @param file 
-     * @param line 
+     *
+     * @param calculated_value
+     * @param calculated_source
+     * @param extpected_value
+     * @param file
+     * @param line
      */
     static void PtrEqualsFunc(void *calculated_value, const char *calculated_source, void *extpected_value, const char *file, int line);
 
     /**
      * @brief ArrayXYZ version
-     * 
-     * @param calculated_value 
-     * @param calculated_source 
-     * @param expected_value 
-     * @param file 
-     * @param line 
+     *
+     * @param calculated_value
+     * @param calculated_source
+     * @param expected_value
+     * @param file
+     * @param line
      */
     static void XYZEqualsFunc(const ArrayXYZ &calculated_value, const char *calculated_source, const ArrayXYZ &expected_value, const char *file, int line);
 };
