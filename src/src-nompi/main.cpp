@@ -48,23 +48,23 @@ int main(int argc, char *argv[]) {
     std::cout << a4_2 << std::endl;
     std::cout << "========\n";
 
+    std::cout << "test0" << std::endl;
 
 
-    ElementTri t1;
+    // ElementTri t1;
     ElementQuad q1;
     std::vector<Node*> nodes3;
     std::vector<Node*> nodes4;
     ArrayXYZ v4(1.0, 2.0, 3.0);
     Node node0 = Node(v4);
-    Node node1 = Node(v4);
-    Node node2 = Node(v4);
     for (int i = 0; i < 3; i++) {
         nodes3.push_back(&node0);
     }
     for (int i = 0; i < 4; i++) {
         nodes4.push_back(&node0);
     }
-    t1.setNodes(nodes3);
+    std::cout << "test1" << std::endl;
+    // t1.setNodes(nodes3);
     q1.setNodes(nodes4);
     // ElementQuad e1(0, 1, 2, 3);
 
