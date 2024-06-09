@@ -88,6 +88,33 @@ public:
     void writeVtkPointsMassHeader(const std::vector<Node*> &my_nodes);
 
     void writeVtkPointsMass(const std::vector<Node*> &my_nodes);
+
+    void WriteBinaryCfdProcData(const std::string &file_name, const std::vector<Node*> &my_nodes, const std::vector<ElementQuad*> &my_elems, const int &step) {
+        WriteBinaryCfdProcData(file_name.c_str(), my_nodes, my_elems, step);
+    }
+
+    void WriteBinaryCfdProcData(const char *file_name, const std::vector<Node*> &my_nodes, const std::vector<ElementQuad*> &my_elems, const int &step) {
+        file_name_ = file_name;
+        out_.open(file_name, std::ios::out | std::ios::binary);
+
+        std::size_t n_my_nodes = my_nodes.size();
+        std::size_t n_my_elems = my_elems.size();
+        out_.write((char*)&step, sizeof(std::size_t));
+        out_.write((char*)&n_my_nodes, sizeof(std::size_t));
+        out_.write((char*)&n_my_elems, sizeof(std::size_t));
+
+        for (std::size_t i = 0; i < n_my_nodes; i++) {
+            out_.write((char*)&my_nodes[i]->local_index_, sizeof(std::size_t));
+            out_.write((char*)&my_nodes[i]->vel_.x_, sizeof(double));
+            out_.write((char*)&my_nodes[i]->vel_.y_, sizeof(double));
+            out_.write((char*)&my_nodes[i]->vel_.z_, sizeof(double));
+        }
+
+        for (std::size_t i = 0; i < n_my_elems; i++) {
+            out_.write((char*)&my_elems[i]->global_index_, sizeof(int));
+            out_.write((char*)&my_elems[i]->p_, sizeof(double));
+        }
+    }
 };
 
 #endif // _FILEWRITER_H_

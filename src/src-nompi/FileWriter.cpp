@@ -140,16 +140,20 @@ void FileWriter::writeVtkCells(const std::vector<Element*> &my_elems) {
     Logger::out << "FileWriter::writeVtkCells" << file_name_ << std::endl;
     size_t number_of_elems = my_elems.size();
     for (size_t i = 0; i < number_of_elems; i++) {
-        std::cout << "i = " << i << std::endl;
-        size_t number_of_nodes = my_elems[i]->getNumberOfNodes();
-        std::cout << "number_of_nodes = " << number_of_nodes << std::endl;
+        // std::cout << "i = " << i << std::endl;
+        size_t number_of_nodes = my_elems[i]->GetNumberOfNodes();
+        // std::cout << "number_of_nodes = " << number_of_nodes << std::endl;
         out_ << number_of_nodes << " ";
         for (size_t j = 0; j < number_of_nodes; j++) {
-            std::cout << "j = " << j << std::endl;
-            if (j != number_of_nodes - 1)
-                out_ << my_elems[i]->nodes_[j]->global_index_ - 1 << " ";
-            else
-                out_ << my_elems[i]->nodes_[j]->global_index_ - 1 << "\n";
+            // std::cout << "j = " << j << std::endl;
+            if (j != number_of_nodes - 1) {
+                // out_ << my_elems[i]->nodes_[j]->global_index_ - 1 << " ";
+                out_ << my_elems[i]->nodes_[j]->global_index_<< " ";
+            }
+            else {
+                // out_ << my_elems[i]->nodes_[j]->global_index_ - 1 << "\n";
+                out_ << my_elems[i]->nodes_[j]->global_index_ << "\n";
+            }
         }
     }
 }
@@ -164,8 +168,8 @@ void FileWriter::writeVtkCellsTypes(const std::vector<Element *> &my_elems) {
     Logger::out << "FileWriter::writeVtkCellsTypes" << file_name_ << std::endl;
     size_t number_of_elems = my_elems.size();
     for (size_t i = 0; i < number_of_elems; i++) {
-        size_t number_of_nodes = my_elems[i]->getNumberOfNodes();
-        std::cout << "number_of_nodes = " << number_of_nodes << std::endl;
+        size_t number_of_nodes = my_elems[i]->GetNumberOfNodes();
+        // std::cout << "number_of_nodes = " << number_of_nodes << std::endl;
         if (number_of_nodes == 3)
             out_ << 5 << "\n";
         else if (number_of_nodes == 4)
