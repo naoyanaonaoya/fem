@@ -20,9 +20,9 @@ class ElementRef {
 
 public:
 
-    Element *element_;
+    Element* element_;
 
-    int index_in_element_;
+    std::size_t index_in_element_;
 
 };
 
@@ -31,12 +31,12 @@ class Node {
 public:
 
     //! node number from 0-index
-    int global_index_;
+    std::size_t global_index_;
 
     //! node number from 0-index in the rank
-    int local_index_;
+    std::size_t local_index_;
 
-    size_t element_ref_num_;
+    std::size_t element_ref_num_;
 
     ElementRef* element_refs_;
 
@@ -48,13 +48,13 @@ public:
     //! velocity of the node
     ArrayXYZ vel_;
 
-    ArrayXYZ d_vel_;
+    ArrayXYZ vel_d_;
 
     //! concentrated mass
     double m_;
 
     //! inverse of concentrated the mass
-    double inv_m_;
+    double m_inv_;
 
     //! delta_t / m
     double delta_t_by_m_;
@@ -62,7 +62,7 @@ public:
     Node(ArrayXYZ pos) {
         pos_ = pos;
         m_ = 0.0;
-        inv_m_ = 0.0;
+        m_inv_ = 0.0;
         delta_t_by_m_ = 0.0;
         this->element_refs_ = &this->element_refs_array_[0];
         this->element_ref_num_ = 0;
@@ -76,7 +76,7 @@ public:
      */
     Node() {
         m_ = 0.0;
-        inv_m_ = 0.0;
+        m_inv_ = 0.0;
         delta_t_by_m_ = 0.0;
         this->element_refs_ = &this->element_refs_array_[0];
         this->element_ref_num_ = 0;
@@ -92,35 +92,41 @@ public:
         m_ = o.m_;
         pos_ = o.pos_;
         vel_ = o.vel_;
-        this->copyElementRefsFrom(o);
+        this->CopyElementRefsFrom(o);
     }
 
     // destructor
     ~Node() {
-        this->clearElementRefs();
+        this->ClearElementRefs();
     }
 
     // void clearElementRefs();
 
-    void addElementRef(Element *element, int node_index_in_element);
+    void SetPos(double x, double y, double z);
 
-    void copyElementRefsFrom(const Node &o);
+    void SetPos(const ArrayXYZ& pos);
 
-    void updateElementRef(Element *element, int node_index_in_element);
+    void SetVel(double x, double y, double z);
 
-    void clearElementRefs();
+    void SetVel(const ArrayXYZ& vel);
 
-    void clearMass();
+    void AddElementRef(Element *element, int node_index_in_element);
 
-    void calcInvMass(double delta_t);
+    void CopyElementRefsFrom(const Node &o);
 
-    // void getRanks(std::set<int> &ranks) const;
+    void UpdateElementRef(Element *element, int node_index_in_element);
 
-    void gatherDVel();
+    void GetRanks(std::set<std::size_t> &ranks) const;
 
-    void applyDVel() {
-        this->vel_ += d_vel_;
-    }
+    void ClearElementRefs();
+
+    void ClearMass();
+
+    void CalcMassInv(double delta_t);
+
+    void GatherVelD();
+
+    void ApplyVelD();
 
 private:
 
