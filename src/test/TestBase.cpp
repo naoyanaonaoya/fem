@@ -195,8 +195,10 @@ void TestBase::StringEqualsFunc(
 
 /* pointer version */
 void TestBase::PtrEqualsFunc(
-    void *calculated_value, const char *calculated_source, void *expected_value, const char *file,
-    int line) {
+    void *calculated_value, const char *calculated_source, void *expected_value,
+    const char *file, int line
+)
+{
     test_count_++;
     (*pout_) << "[" << test_count_ << "]";
 

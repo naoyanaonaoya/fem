@@ -16,20 +16,18 @@ public:
 void TestState::run() {
     st_.round_ = 100;
     st_.t_ = 200.0;
-
-
-    st_.reset();
-    st_.recordStartTime();
-    test_int_equals(st_.getRound(), 0);
-    test_double_equals(st_.getT(), 0);
+    st_.Reset();
+    st_.RecordStartTime();
+    test_sizet_equals(st_.GetRound(), 0);
+    test_double_equals(st_.GetT(), 0);
 
     for (int i = 1; i < 10; i++) {
-        st_.nextRound(0.1);
-        test_int_equals(st_.getRound(), i);
-        test_double_equals(st_.getT(), 0.1 * (double)i);
+        st_.NextRound(0.1);
+        test_sizet_equals(st_.GetRound(), i);
+        test_double_equals(st_.GetT(), 0.1 * (double)i);
     }
-    st_.measureElapsedTime();
-    std::cout << "elapsed_time = " << st_.getElapsedTime() << std::endl;
+    st_.MeasureElapsedTime();
+    std::cout << "elapsed_time = " << st_.GetElapsedTime() << std::endl;
 }
 
 int main(int argc, char *argv[]) {

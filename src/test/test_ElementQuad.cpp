@@ -39,29 +39,29 @@ void TestElementQuad::setup(double rot) {
     Logger::out << "rotation : " << rot_ * 180.0 / M_PI << " deg.\n";
 
     for (int i = 0; i < 4; i++) {
-        nodes_[i].clearElementRefs();
-        nodes_[i].clearMass();
+        nodes_[i].ClearElementRefs();
+        nodes_[i].ClearMass();
     }
 
     // setup
     double cosTheta = cos(this->rot_);
     double sinTheta = sin(this->rot_);
-    nodes_[0].pos_.set(0.0 * cosTheta + 0.0 * (-sinTheta), 0.0 * sinTheta + 0.0 * cosTheta, 0.0);
-    nodes_[1].pos_.set(2.0 * cosTheta + 0.0 * (-sinTheta), 2.0 * sinTheta + 0.0 * cosTheta, 0.0);
-    nodes_[2].pos_.set(2.0 * cosTheta + 2.0 * (-sinTheta), 2.0 * sinTheta + 2.0 * cosTheta, 0.0);
-    nodes_[3].pos_.set(0.0 * cosTheta + 2.0 * (-sinTheta), 0.0 * sinTheta + 2.0 * cosTheta, 0.0);
+    nodes_[0].pos_.Set(0.0 * cosTheta + 0.0 * (-sinTheta), 0.0 * sinTheta + 0.0 * cosTheta, 0.0);
+    nodes_[1].pos_.Set(2.0 * cosTheta + 0.0 * (-sinTheta), 2.0 * sinTheta + 0.0 * cosTheta, 0.0);
+    nodes_[2].pos_.Set(2.0 * cosTheta + 2.0 * (-sinTheta), 2.0 * sinTheta + 2.0 * cosTheta, 0.0);
+    nodes_[3].pos_.Set(0.0 * cosTheta + 2.0 * (-sinTheta), 0.0 * sinTheta + 2.0 * cosTheta, 0.0);
     for (int i = 0; i < 4; i++)
         nodes_[i].global_index_ = i + 1;
-    elem_.setNodes({&nodes_[0], &nodes_[1], &nodes_[2], &nodes_[3]});
+    elem_.SetNodes({&nodes_[0], &nodes_[1], &nodes_[2], &nodes_[3]});
 }
 
 void TestElementQuad::testInvariants() {
-    elem_.calcInvariants1(re_);
+    elem_.CalcInvariants1(re_);
 
-    nodes_[0].calcInvMass(delta_t_);
-    nodes_[1].calcInvMass(delta_t_);
-    nodes_[2].calcInvMass(delta_t_);
-    nodes_[3].calcInvMass(delta_t_);
+    nodes_[0].CalcMassInv(delta_t_);
+    nodes_[1].CalcMassInv(delta_t_);
+    nodes_[2].CalcMassInv(delta_t_);
+    nodes_[3].CalcMassInv(delta_t_);
 
     for (int i = 0; i < 4; i++)
         test_double_equals(nodes_[i].m_, 1.0);
@@ -124,27 +124,27 @@ void TestElementQuad::testInvariants() {
     }
 
 
-    elem_.calcInvariants2(delta_t_);
+    elem_.CalcInvariants2(delta_t_);
 }
 
 void TestElementQuad::testVelocityPrediction() {
-    this->nodes_[0].vel_.set(0.0, 0.0, 0.0);
-    this->nodes_[1].vel_.set(0.0, 0.0, 0.0);
-    this->nodes_[2].vel_.set(0.0, 0.0, 0.0);
-    this->nodes_[3].vel_.set(0.0, 0.0, 0.0);
+    this->nodes_[0].vel_.Set(0.0, 0.0, 0.0);
+    this->nodes_[1].vel_.Set(0.0, 0.0, 0.0);
+    this->nodes_[2].vel_.Set(0.0, 0.0, 0.0);
+    this->nodes_[3].vel_.Set(0.0, 0.0, 0.0);
     this->elem_.p_ = 0.0;
 
     this->applyBoundaryCondition();
 
     Logger::out << "Start velocity prediction\n";
 
-    elem_.calcVelocityPrediction(delta_t_, this->re_);
+    elem_.CalcVelocityPrediction(delta_t_, this->re_);
 }
 
 void TestElementQuad::testVelocityCorrection() {
     Logger::out << "Start velocity correction\n";
     double eps = 1.0e-4;
-    double abs_div = this->elem_.calcDivergenceAndCorrect(eps);
+    double abs_div = this->elem_.CalcDivergenceAndCorrect(eps);
     Logger::out << "abs_div : " << abs_div << "\n";
     Logger::out << "p : " << this->elem_.p_ << "\n";
 
@@ -156,13 +156,13 @@ void TestElementQuad::testVelocityCorrection() {
 void TestElementQuad::applyBoundaryCondition() {
     double u = 0.1 * cos(this->rot_);
     double v = 0.1 * sin(this->rot_);
-    nodes_[0].vel_.set(u, v, 0.0);
+    nodes_[0].vel_.Set(u, v, 0.0);
 }
 
 void TestElementQuad::applyVelocityDelta() {
     for (int i = 0; i < 4; i++) {
-        this->nodes_[i].gatherDVel();
-        this->nodes_[i].applyDVel();
+        this->nodes_[i].GatherVelD();
+        this->nodes_[i].ApplyVelD();
     }
     applyBoundaryCondition();
 }
@@ -222,12 +222,283 @@ private:
 
     void testElementRefs();
 
-    void setRanksToElem_same();
+    void setProcsToElem_same();
 
-    void testRanks_same();
+    void setProcsToElem_4();
 
-    void testRnaks_4();
+    void testProcs_same();
+
+    void testProcs_4();
+
+    void applyBoundaryCondition();
+
+    void applyVelocityDelta();
+
+    void testVelocityPrediction();
+
+    void testVelocityCorrection();
+
+    void outputVTK();
 };
+
+void TestElementQuad4::setNode() {
+    /**
+     * @brief Set the Node
+     * 9 nodes, order:
+     * 6 - 7 - 8
+     * | 2 | 3 |
+     * 3 - 4 - 5
+     * | 0 | 1 |
+     * 0 - 1 - 2
+     */
+    for (int y = 0; y < 3; y++) {
+        for (int x = 0; x < 3; x++) {
+            int ni = y * 3 + x;
+            nodes_[ni].pos_.Set(2.0 * x, 2.0 * y, 0.0);
+            nodes_[ni].global_index_ = ni;
+            // std::cout << "n[" << ni << "] = " << n_[ni].pos_ << std::endl;
+        }
+    }
+}
+
+void TestElementQuad4::resetElementRefs() {
+    for (int ni = 0; ni < 9; ni++) {
+        nodes_[ni].ClearElementRefs();
+    }
+}
+
+void TestElementQuad4::setNodesToElem() {
+    /*
+     * この関数が呼ばれる前に他のテストで ElementRef が作成済みだった場合に備えて
+     * ElementRefを一旦クリアする
+     */
+
+    // int a = 0;
+    // a++と++aはすこし異なる
+    // test[a++] = 1;
+    // test[0]に1が入ってから、aがインクリメントされる
+    // n_[0].element_refs_array_[n_[0].element_ref_num_++].element_ = &e_[0];
+    // std::cout << "n_[0].element_ref_num_ = " << n_[0].element_ref_num_ << std::endl;
+
+    this->resetElementRefs();
+    /**
+     * @brief Set the element to the node
+     * 9 nodes, 4 elements, order:
+     * 6 - 7 - 8
+     * | 2 | 3 |
+     * 3 - 4 - 5
+     * | 0 | 1 |
+     * 0 - 1 - 2
+     */
+    for (int y = 0; y < 2; y++) {
+        for (int x = 0; x < 2; x++) {
+            int ei = 2 * y + x;
+            int ni = 3 * y + x;
+            std::cout << &nodes_[ni + 0] << std::endl;
+            std::cout << &nodes_[ni + 1] << std::endl;
+            std::cout << &nodes_[ni + 4] << std::endl;
+            std::cout << &nodes_[ni + 3] << std::endl;
+            /* counter clockwise になるように注意 */
+            elems_[ei].SetNodes(
+                &nodes_[ni + 0],
+                &nodes_[ni + 1],
+                &nodes_[ni + 4],
+                &nodes_[ni + 3]
+            );
+        }
+    }
+}
+
+void TestElementQuad4::setNodesToElem_clockwise() {
+    /*
+     * この関数が呼ばれる前に他のテストで ElementRef が作成済みだった場合に備えて
+     * ElementRefを一旦クリアする
+     */
+    resetElementRefs();
+
+    /*
+     * 要素に節点を登録する。ただし、要素0だけは、節点をわざと時計周りに登録する
+     *
+     * 要素の並び順は:
+     *
+     * 0  1
+     * 3  2
+     * こっちが正解？
+     * 2 3
+     * 0 1
+     */
+    for (int y = 0; y < 2; y++) {
+        for (int x = 0; x < 2; x++) {
+            int ei = 2 * y + x;
+            int ni = 3 * y + x;
+            if (ei == 0) {
+                /* 要素0だけ時計周り(通常と逆順)に節点を登録 */
+                elems_[ei].SetNodes(
+                    &nodes_[ni + 3],
+                    &nodes_[ni + 4],
+                    &nodes_[ni + 1],
+                    &nodes_[ni    ]
+                );
+            } else {
+                /* 通常は反時計周りに節点を登録 */
+                elems_[ei].SetNodes(
+                    &nodes_[ni    ],
+                    &nodes_[ni + 1],
+                    &nodes_[ni + 4],
+                    &nodes_[ni + 3]
+                );
+            }
+        }
+    }
+}
+
+void TestElementQuad4::calcInvariants() {
+    for (int ei = 0; ei < 4; ei++)
+        elems_[ei].CalcInvariants1(re_);
+
+    for (int ei = 0; ei < 4; ei++)
+        elems_[ei].CalcInvariants2(delta_t_);
+}
+
+void TestElementQuad4::testNodes() {
+    test_ptr_equals(elems_[0].nodes_[0], &nodes_[0]);
+    test_ptr_equals(elems_[0].nodes_[1], &nodes_[1]);
+    test_ptr_equals(elems_[0].nodes_[2], &nodes_[4]);
+    test_ptr_equals(elems_[0].nodes_[3], &nodes_[3]);
+    test_ptr_equals(elems_[1].nodes_[0], &nodes_[1]);
+    test_ptr_equals(elems_[1].nodes_[1], &nodes_[2]);
+    test_ptr_equals(elems_[1].nodes_[2], &nodes_[5]);
+    test_ptr_equals(elems_[1].nodes_[3], &nodes_[4]);
+    test_ptr_equals(elems_[2].nodes_[0], &nodes_[3]);
+    test_ptr_equals(elems_[2].nodes_[1], &nodes_[4]);
+    test_ptr_equals(elems_[2].nodes_[2], &nodes_[7]);
+    test_ptr_equals(elems_[2].nodes_[3], &nodes_[6]);
+    test_ptr_equals(elems_[3].nodes_[0], &nodes_[4]);
+    test_ptr_equals(elems_[3].nodes_[1], &nodes_[5]);
+    test_ptr_equals(elems_[3].nodes_[2], &nodes_[8]);
+    test_ptr_equals(elems_[3].nodes_[3], &nodes_[7]);
+}
+
+void TestElementQuad4::testElementRefs() {
+    test_int_equals(nodes_[0].element_ref_num_, 1);
+    test_ptr_equals(nodes_[0].element_refs_[0].element_, &elems_[0]);
+    test_int_equals(nodes_[0].element_refs_[0].index_in_element_, 0);
+
+    test_int_equals(nodes_[1].element_ref_num_, 2);
+    test_ptr_equals(nodes_[1].element_refs_[0].element_, &elems_[0]);
+    test_int_equals(nodes_[1].element_refs_[0].index_in_element_, 1);
+    test_ptr_equals(nodes_[1].element_refs_[1].element_, &elems_[1]);
+    test_int_equals(nodes_[1].element_refs_[1].index_in_element_, 0);
+
+    test_int_equals(nodes_[2].element_ref_num_, 1);
+    test_ptr_equals(nodes_[2].element_refs_[0].element_, &elems_[1]);
+    test_int_equals(nodes_[2].element_refs_[0].index_in_element_, 1);
+
+    test_int_equals(nodes_[3].element_ref_num_, 2);
+    test_ptr_equals(nodes_[3].element_refs_[0].element_, &elems_[0]);
+    test_int_equals(nodes_[3].element_refs_[0].index_in_element_, 3);
+    test_ptr_equals(nodes_[3].element_refs_[1].element_, &elems_[2]);
+    test_int_equals(nodes_[3].element_refs_[1].index_in_element_, 0);
+
+    test_int_equals(nodes_[4].element_ref_num_, 4);
+    test_ptr_equals(nodes_[4].element_refs_[0].element_, &elems_[0]);
+    test_int_equals(nodes_[4].element_refs_[0].index_in_element_, 2);
+    test_ptr_equals(nodes_[4].element_refs_[1].element_, &elems_[1]);
+    test_int_equals(nodes_[4].element_refs_[1].index_in_element_, 3);
+    test_ptr_equals(nodes_[4].element_refs_[2].element_, &elems_[2]);
+    test_int_equals(nodes_[4].element_refs_[2].index_in_element_, 1);
+    test_ptr_equals(nodes_[4].element_refs_[3].element_, &elems_[3]);
+    test_int_equals(nodes_[4].element_refs_[3].index_in_element_, 0);
+
+    test_int_equals(nodes_[5].element_ref_num_, 2);
+    test_ptr_equals(nodes_[5].element_refs_[0].element_, &elems_[1]);
+    test_int_equals(nodes_[5].element_refs_[0].index_in_element_, 2);
+    test_ptr_equals(nodes_[5].element_refs_[1].element_, &elems_[3]);
+    test_int_equals(nodes_[5].element_refs_[1].index_in_element_, 1);
+
+    test_int_equals(nodes_[6].element_ref_num_, 1);
+    test_ptr_equals(nodes_[6].element_refs_[0].element_, &elems_[2]);
+    test_int_equals(nodes_[6].element_refs_[0].index_in_element_, 3);
+
+    test_int_equals(nodes_[7].element_ref_num_, 2);
+    test_ptr_equals(nodes_[7].element_refs_[0].element_, &elems_[2]);
+    test_int_equals(nodes_[7].element_refs_[0].index_in_element_, 2);
+    test_ptr_equals(nodes_[7].element_refs_[1].element_, &elems_[3]);
+    test_int_equals(nodes_[7].element_refs_[1].index_in_element_, 3);
+
+    test_int_equals(nodes_[8].element_ref_num_, 1);
+    test_ptr_equals(nodes_[8].element_refs_[0].element_, &elems_[3]);
+    test_int_equals(nodes_[8].element_refs_[0].index_in_element_, 2);
+}
+
+void TestElementQuad4::setProcsToElem_same() {
+    for (int ei = 0; ei < 4; ei++) {
+        elems_[ei].SetRank(0);
+    }
+}
+
+void TestElementQuad4::testProcs_same() {
+    std::set<std::size_t> ranks;
+    nodes_[0].GetRanks(ranks);
+    test_sizet_equals(ranks.size(), 1);
+    test_sizet_equals(ranks.count(0), 1);
+    test_sizet_equals(ranks.count(1), 0);
+
+    nodes_[4].GetRanks(ranks);
+    test_sizet_equals(ranks.size(), 1);
+    test_sizet_equals(ranks.count(0), 1);
+    test_sizet_equals(ranks.count(1), 0);
+}
+
+
+void TestElementQuad4::setProcsToElem_4() {
+    for (int ei = 0; ei < 4; ei++) {
+        elems_[ei].SetRank(ei);
+    }
+}
+
+void TestElementQuad4::testProcs_4() {
+    std::set<std::size_t> ranks;
+    nodes_[4].GetRanks(ranks);
+    test_sizet_equals(ranks.size(), 4);
+    for (int ei = 0; ei < 4; ei++) {
+        test_sizet_equals(ranks.count(ei), 1);
+    }
+    test_sizet_equals(ranks.count(4), 0);
+}
+
+void TestElementQuad4::testVelocityPrediction() {
+    for (int i = 0; i < 9; i++) {
+        nodes_[i].vel_.Set(0.0, 0.0, 0.0);
+    }
+    for (int i = 0; i < 4; i++) {
+        elems_[i].p_ = 0.0;
+    }
+
+    applyBoundaryCondition();
+}
+
+void TestElementQuad4::applyBoundaryCondition() {
+    double u = 0.1;
+    double v = 0.0;
+    nodes_[0].vel_.Set(u, v, 0.0);
+    nodes_[3].vel_.Set(u, v, 0.0);
+    nodes_[6].vel_.Set(u, v, 0.0);
+}
+
+void TestElementQuad4::outputVTK() {
+    std::vector<Node*> tnodes(9);
+    for (std::size_t i = 0; i < tnodes.size(); i++) {
+        tnodes[i] = &nodes_[i];
+    };
+    std::vector<Element*> telems(4);
+    for (std::size_t i = 0; i < telems.size(); i++) {
+        telems[i] = &elems_[i];
+    }
+
+    FileWriter fr;
+    fr.writeVtkCfdProcData("./test_quad_element.vtk", tnodes, telems);
+}
 
 void TestElementQuad::run() {
     this->setOut(&Logger::out);
@@ -238,10 +509,37 @@ void TestElementQuad::run() {
     this->outputVtk();
 }
 
+void TestElementQuad4::run() {
+    this->setOut(&Logger::out);
+
+    this->setNode();
+    this->setNodesToElem();
+    this->testNodes();
+    this->testElementRefs();
+
+    this->setProcsToElem_same();
+    this->testProcs_same();
+
+    this->setProcsToElem_4();
+    this->testProcs_4();
+    
+    this->calcInvariants();
+
+    this->testVelocityPrediction();
+    
+    this->outputVTK();
+}
+
 int main(int argc, char *argv[]) {
-    Logger::openLog("test_ElementQuad", 0);
-    TestElementQuad test;
-    test.run();
+    Logger::OpenLog("test_ElementQuad", 0);
+    
+    // TestElementQuad test;
+    // test.run();
+
+    TestElementQuad4 test4;
+    test4.run();
+
+    Logger::CloseLog();
 
     return TestBase::report();
 }

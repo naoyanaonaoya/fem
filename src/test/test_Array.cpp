@@ -16,11 +16,11 @@ void TestArray::run() {
     Array<2> a2_0(1.0, 2.0);
     test_double_equals(a2_0[0], 1.0);
     test_double_equals(a2_0[1], 2.0);
-    a2_0.clear();
+    a2_0.Clear();
     test_double_equals(a2_0[0], 0.0);
     test_double_equals(a2_0[1], 0.0);
-    std::cout << "clear" << std::endl;
-    int a20Size = a2_0.size();
+    std::cout << "Clear" << std::endl;
+    int a20Size = a2_0.Size();
     test_int_equals(a20Size, 2);
 
 
@@ -34,7 +34,7 @@ void TestArray::run() {
     test_double_equals(a2_4[0], -1.0);
     test_double_equals(a2_4[1], -1.0);
     test_double_equals(a, 18.0);
-    a2_3.clear();
+    a2_3.Clear();
     test_double_equals(a2_3[0], 0.0);
     test_double_equals(a2_3[1], 0.0);
 
@@ -50,8 +50,8 @@ void TestArray::run() {
     test_double_equals(dotProduct, 20.0);
 
     Array<3> a3_2;
-    a3_2.clear();
-    for (size_t i = 0; i < a3_2.size(); i++)
+    a3_2.Clear();
+    for (size_t i = 0; i < a3_2.Size(); i++)
         test_double_equals(a3_2[i], 0.0);
 
     Array<3> a3_3(0.0, 1.0, 2.0);
