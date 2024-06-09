@@ -1,13 +1,16 @@
 #ifndef _FILE_READER_H_
 #define _FILE_READER_H_
 
-#include <fstream>
-#include <sstream>
-#include <string>
-
 #include "DataException.hpp"
 #include "IoException.hpp"
 #include "Node.hpp"
+#include "Element.hpp"
+#include "ElementQuad.hpp"
+
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <vector>
 
 class FileReader {
 
@@ -47,7 +50,7 @@ public:
      * @return none
      * @exception IoException : cannot open the file
      */
-    void open(const char *file_name_);
+    void Open(const char *file_name_);
 
     /**
      * @fn
@@ -56,9 +59,7 @@ public:
      * @return none
      * @exception IoException : cannot open the file
      */
-    void open(const std::string &file_name_) {
-        open(file_name_.c_str());
-    }
+    void Open(const std::string &file_name_);
 
     /**
      * @fn
@@ -66,7 +67,7 @@ public:
      * @param none
      * @return none
      */
-    void close();
+    void Close();
 
     /**
      * @fn
@@ -74,7 +75,7 @@ public:
      * @param none
      * @return none
      */
-    void readLine();
+    void ReadLine();
 
     /**
      * @fn
@@ -83,7 +84,7 @@ public:
      * @param val
      * @return none
      */
-    void readLabeledDoubleLine(const char *label, double &val);
+    void ReadLabeledDoubleLine(const char *label, double &val);
 
     /**
      * @fn
@@ -92,7 +93,16 @@ public:
      * @param val
      * @return none
      */
-    void readLabeledIntLine(const char *label, int &val);
+    void ReadLabeledIntLine(const char *label, int &val);
+
+    /**
+     * @fn
+     * @brief
+     * @param label 
+     * @param val
+     * @return none 
+     */
+    void ReadLabeledSizeTLine(const char *label, std::size_t &val);
 
     /**
      * @fn
@@ -101,7 +111,7 @@ public:
      * @param val
      * @return none
      */
-    void readLabeledStringLine(const char *label, std::string &val);
+    void ReadLabeledStringLine(const char *label, std::string &val);
 
     /**
      * @fn
@@ -110,7 +120,7 @@ public:
      * @return none
      * @note __FILE__, __LINE__ is macro to get the file name and line number
      */
-    void readKeyword(const char *keyword);
+    void ReadKeyword(const char *keyword);
 
     /**
      * @fn
@@ -119,7 +129,7 @@ public:
      * @param label
      * @return none
      */
-    void readDouble(double &val, const char *label);
+    void ReadDouble(double &val, const char *label);
 
     /**
      * @fn
@@ -128,7 +138,9 @@ public:
      * @param label
      * @return none
      */
-    void readInt(int &val, const char *label);
+    void ReadInt(int &val, const char *label);
+
+    void ReadSizeT(std::size_t &val, const char *label);
 
     /**
      * @fn
@@ -136,7 +148,7 @@ public:
      * @param expected_val
      * @param label
      */
-    void readExpectedInt(int expected_val, const char *label);
+    void ReadExpectedInt(int expected_val, const char *label);
 
     /**
      * @fn
@@ -145,11 +157,13 @@ public:
      * @param label
      * @return none
      */
-    void readString(std::string &val, const char *label);
+    void ReadString(std::string &val, const char *label);
 
-    // void readBinCfdProcData();
-    // void readBinCfdProcData(const char *file_name, const std::vector)
+    void ReadExpectedSizeT(std::size_t expected_val, const char *label);
 
+    void ReadBinaryCfdProcData(const std::string &file_name, const std::vector<Node*> &my_nodes, const std::vector<ElementQuad*> &my_elems, const std::size_t &step);
+    
+    void ReadBinaryCfdProcData(const char *file_name, const std::vector<Node*> &my_nodes, const std::vector<ElementQuad*> &my_elems, const std::size_t &step);
 
 private:
 
@@ -159,7 +173,7 @@ private:
      * @param ss
      * @return none
      */
-    void addFileNameAndLineNoTo(std::stringstream &ss);
+    void AddFileNameAndLineNoTo(std::stringstream &ss);
 
 };
 

@@ -38,7 +38,7 @@ public:
      * @param none
      * @return none
      */
-    void reset();
+    void Reset();
 
     /**
      * @fn
@@ -46,7 +46,7 @@ public:
      * @param delta_t
      * @param step
      */
-    void resetRestart(const double &delta_t, const int &step);
+    void ResetRestart(const double &delta_t, const int &step);
 
     /**
      * @fn
@@ -54,7 +54,7 @@ public:
      * @param none
      * @return double
      */
-    double getT() const;
+    double GetT() const;
 
     /**
      * @fn
@@ -62,7 +62,7 @@ public:
      * @param none
      * @return int
      */
-    int getRound() const;
+    std::size_t GetRound() const;
 
     /**
      * @fn
@@ -70,7 +70,7 @@ public:
      * @param delta_t
      * @return none
      */
-    void nextRound(double delta_t);
+    void NextRound(double delta_t);
 
     /**
      * @fn
@@ -78,7 +78,7 @@ public:
      * @param none
      * @return none
      */
-    void recordStartTime();
+    void RecordStartTime();
 
     /**
      * @fn
@@ -86,7 +86,7 @@ public:
      * @param none
      * @return none
      */
-    void measureElapsedTime();
+    void MeasureElapsedTime();
 
     /**
      * @fn
@@ -94,14 +94,14 @@ public:
      * @param none
      * @return double
      */
-    double getElapsedTime() const;
+    double GetElapsedTime() const;
     /**
      * @fn
      * @brief Set the Elapsed Time
      * @param elapsed_time
      * @return none
      */
-    void setElapsedTime(double elapsed_time);
+    void SetElapsedTime(double elapsed_time);
 };
 
 #endif // _STATE_H_
