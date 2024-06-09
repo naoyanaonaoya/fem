@@ -13,11 +13,16 @@ add_library(fem_base
     src/src-nompi/Logger.cpp
     src/src-nompi/State.cpp
     src/src-nompi/Params.cpp
+    src/src-nompi/CfdDriver_sp.cpp
+    src/src-nompi/CfdProcData.cpp
+    src/src-nompi/CfdCommData.cpp
     src/src-nompi/ElementTri.cpp
     src/src-nompi/ElementQuad.cpp
     src/src-nompi/ErrorMessage.cpp
     src/src-nompi/FileWriter.cpp
     src/src-nompi/FileReader.cpp
+    src/src-nompi/Boundary.cpp
+    src/src-nompi/test.cpp
 )
 
 message(STATUS "CMAKE_SOURCE_DIR: ${CMAKE_SOURCE_DIR}")
@@ -31,12 +36,17 @@ add_executable(main src/src-nompi/main.cpp)
 # 先に定義した'fem_base'ライブラリをリンクする。
 target_link_libraries(main fem_base)
 
+add_executable(test src/src-nompi/test.cpp)
+
+add_executable(gmsh2sdpss src/utility/gmsh2sdpss.cpp)
+
 
 add_library(fem_test_base
     src/test/TestBase.cpp
 )
 
 target_link_libraries(fem_test_base fem_base)
+
 
 add_executable(test_Array src/test/test_Array.cpp)
 target_link_libraries(test_Array fem_test_base)
@@ -47,5 +57,14 @@ target_link_libraries(test_Matrix fem_test_base)
 add_executable(test_State src/test/test_State.cpp)
 target_link_libraries(test_State fem_test_base)
 
+add_executable(test_Node src/test/test_Node.cpp)
+target_link_libraries(test_Node fem_test_base)
+
 add_executable(test_ElementQuad src/test/test_ElementQuad.cpp)
 target_link_libraries(test_ElementQuad fem_test_base)
+
+add_executable(test_Params src/test/test_Params.cpp)
+target_link_libraries(test_Params fem_test_base)
+
+add_executable(test_Boundary src/test/test_Boundary.cpp)
+target_link_libraries(test_Boundary fem_test_base)
