@@ -91,8 +91,6 @@ public:
 
     Array<4> dw_;
 
-    double p_;
-
     double delta_p_;
 
     double div_;
@@ -108,51 +106,53 @@ public:
     //     this->numberOfNodes_ = 4;
     // }
 
+    void SetNodes(Node* n1, Node* n2, Node* n3, Node* n4);
+
     /**
-     * @brief Set the Nodes object
+     * @brief Set the Nodes
      *
      * @param nodes
      */
-    void setNodes(const std::vector<Node*> &nodes) override;
+    void SetNodes(const std::vector<Node*> &nodes) override;
 
-    void setNodes(const std::initializer_list<Node*> &nodes) override;
+    void SetNodes(const std::initializer_list<Node*> &nodes) override;
 
-    size_t getNumberOfNodes() override;
+    size_t GetNumberOfNodes() override;
 
-    void calcInvariants1(double re);
-
-    void calcInvariants2(double delta_t);
+    void CalcInvariants1(double re) override;
+    
+    void CalcInvariants2(double delta_t) override;
 
     /**
      * @brief Calculate the area
      *
      */
-    void calcArea() override;
+    void CalcArea() override;
 
-    void calcArea3D() override;
+    void CalcArea3D() override;
 
-    void addDVel(ArrayXYZ& d_vel, int node_index) override;
+    void AddVelD(ArrayXYZ& vel_d, int node_index) override;
 
-    double calculateTriangleArea(const ArrayXYZ p0, const ArrayXYZ p1, const ArrayXYZ p2);
+    double CalculateTriangleArea(const ArrayXYZ p0, const ArrayXYZ p1, const ArrayXYZ p2);
 
-    void updateElementNodesOrder();
+    void UpdateElementNodesOrder();
 
-    void calcVelocityPrediction(double delta_t, double re);
+    void CalcVelocityPrediction(double delta_t, double re);
 
-    double calcDivergenceAndCorrect(double epsilon);
+    double CalcDivergenceAndCorrect(double epsilon);
 
     /**
      * @brief Calculate the volume
      *
      */
-    void calcVolume() override;
+    void CalcVolume() override;
 
     /**
      * @brief Calculate the Courant number
      *
      * @param delta_t
      */
-    void calcCourantNumber(const double &delta_t) override;
+    double CalcCourantNumber(const double &delta_t) override;
 };
 
 #endif // _ELEMENTQUAD_H_

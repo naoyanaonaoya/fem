@@ -4,7 +4,7 @@
 
 std::fstream Logger::out;
 
-void Logger::openLog(const char *progname, int rank) {
+void Logger::OpenLog(const char *progname, const std::size_t rank) {
     // create a stringstream to build the file name
     std::stringstream ss;
 
@@ -16,7 +16,7 @@ void Logger::openLog(const char *progname, int rank) {
     out.open(ss.str().c_str(), std::ios::out);
 }
 
-void Logger::closeLog() {
+void Logger::CloseLog() {
     // close the log file
     out.close();
 }

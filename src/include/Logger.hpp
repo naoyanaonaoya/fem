@@ -28,7 +28,7 @@ public:
      * @note Logger::openLog("test_Node", 0)
      * @note rank is 0 if not using MPI
      */
-    static void openLog(const char *progname, int rank);
+    static void OpenLog(const char* progname, const std::size_t rank);
 
     /**
      * @fn
@@ -36,7 +36,7 @@ public:
      * @param none
      * @return none
      */
-    static void closeLog();
+    static void CloseLog();
 };
 
 #endif // _LOGGER_H_

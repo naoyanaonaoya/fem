@@ -20,8 +20,6 @@ private:
 
 public:
 
-    //! pointer to the three nodes
-    Node *nodes_[3];
 
     //! the three edge lengths
     int edge_length_[3];
@@ -31,15 +29,19 @@ public:
 
     ElementTri();
 
-    void setNodes(const std::vector<Node*>& nodes) override;
+    void SetNodes(const std::vector<Node*>& nodes) override;
 
-    void setNodes(const std::initializer_list<Node *> &nodes) override;
+    void SetNodes(const std::initializer_list<Node *> &nodes) override;
 
-    void calcArea() override;
+    void CalcInvariants1(double re) override;
+    
+    void CalcInvariants2(double delta_t) override;
 
-    void calcVolume() override;
+    void CalcArea() override;
 
-    void calcCourantNumber(const double &delta_t) override;
+    void CalcVolume() override;
+
+    double CalcCourantNumber(const double &delta_t) override;
 };
 
 #endif // _ELEMENTTRI_HPP_
