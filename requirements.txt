@@ -1,0 +1,10 @@
+gmsh==4.11.1
+numpy==1.26.1
+numpy-stl==3.0.1
+pandas==2.1.1
+python-dateutil==2.8.2
+python-utils==3.8.1
+pytz==2023.3.post1
+six==1.16.0
+typing_extensions==4.8.0
+tzdata==2023.3
