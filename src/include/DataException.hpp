@@ -25,7 +25,7 @@ public:
     const char *source_file_;
 
     //! source file line number
-    int source_line_;
+    std::size_t source_line_;
 
     //! error message
     std::string msg_str_;
@@ -37,7 +37,7 @@ public:
      * @param line
      * @param msg_str
      */
-    DataException(const char *file, int line, const std::string &msg_str) {
+    DataException(const char *file, std::size_t line, const std::string &msg_str) {
         source_file_ = file;
         source_line_ = line;
         msg_str_ = msg_str;
