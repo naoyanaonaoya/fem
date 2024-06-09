@@ -13,10 +13,10 @@ class Params {
 public:
 
     //! total number of processes
-    int num_procs_;
+    std::size_t num_procs_;
 
     //! rank of this process
-    int my_rank_;
+    std::size_t my_rank_;
 
     //! Reynolds number
     double re_;
@@ -37,10 +37,10 @@ public:
     double epsilon_;
 
     //! maximum number of corrections for velocity correction
-    int max_corrections_;
+    std::size_t max_corrections_;
 
     //! interval for output
-    int n_interval_;
+    std::size_t n_interval_;
 
     //! path to mesh file
     std::string mesh_file_name_;
@@ -76,7 +76,7 @@ public:
      * @param filename
      * @return void
      */
-    void init(int np, int rank, const char *filename);
+    void init(std::size_t np, std::size_t rank, const char *filename);
 
     bool shouldContinue(const State *state) const;
 };

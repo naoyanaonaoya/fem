@@ -13,7 +13,7 @@
  * @param rank
  * @param filename
  */
-void Params::init(int np, int rank, const char *filename) {
+void Params::init(std::size_t np, std::size_t rank, const char *filename) {
     assert(filename != NULL);
 
     num_procs_ = np;
@@ -23,27 +23,27 @@ void Params::init(int np, int rank, const char *filename) {
 
     FileReader rdr;
 
-    rdr.open(filename);
+    rdr.Open(filename);
 
-    rdr.readLabeledDoubleLine("Re", re_);
-    rdr.readLabeledDoubleLine("delta_t", delta_t_);
-    rdr.readLabeledDoubleLine("T", duration_);
-    rdr.readLabeledDoubleLine("T_ramp", t_ramp_);
-    rdr.readLabeledIntLine("N_interval", n_interval_);
-    rdr.readLabeledDoubleLine("max_cpu_time", max_cpu_time_);
-    rdr.readLabeledDoubleLine("epsilon", epsilon_);
-    rdr.readLabeledIntLine("max_corrections", max_corrections_);
-    rdr.readLabeledStringLine("mesh", mesh_file_name_);
-    rdr.readLabeledStringLine("boundary", boundary_file_name_);
-    rdr.readLabeledStringLine("restart", restart_file_name_pattern_);
-    rdr.readLabeledStringLine("outfile", output_file_name_pattern_);
+    rdr.ReadLabeledDoubleLine("Re", re_);
+    rdr.ReadLabeledDoubleLine("delta_t", delta_t_);
+    rdr.ReadLabeledDoubleLine("T", duration_);
+    rdr.ReadLabeledDoubleLine("T_ramp", t_ramp_);
+    rdr.ReadLabeledSizeTLine("N_interval", n_interval_);
+    rdr.ReadLabeledDoubleLine("max_cpu_time", max_cpu_time_);
+    rdr.ReadLabeledDoubleLine("epsilon", epsilon_);
+    rdr.ReadLabeledSizeTLine("max_corrections", max_corrections_);
+    rdr.ReadLabeledStringLine("mesh", mesh_file_name_);
+    rdr.ReadLabeledStringLine("boundary", boundary_file_name_);
+    rdr.ReadLabeledStringLine("restart", restart_file_name_pattern_);
+    rdr.ReadLabeledStringLine("outfile", output_file_name_pattern_);
 
     char restart_file_name[2048];
     snprintf(
         restart_file_name, sizeof(restart_file_name), restart_file_name_pattern_.c_str(), rank
     );
 
-    rdr.close();
+    rdr.Close();
 }
 
 /**
@@ -55,9 +55,9 @@ void Params::init(int np, int rank, const char *filename) {
  */
 bool Params::shouldContinue(const State *state) const {
     // return ((state->getT() < duration_) && (state->getElapsedTime() < max_cpu_time_));
-    if (state->getT() > duration_)
+    if (state->GetT() > duration_)
         return false;
-    if (state->getElapsedTime() > max_cpu_time_)
+    if (state->GetElapsedTime() > max_cpu_time_)
         return false;
     return true;
 }
