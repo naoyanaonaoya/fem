@@ -39,8 +39,8 @@ public:
      */
     template<typename... Args>
     explicit Matrix<ROW, COL>(Args... args) : v_{{args...}} {
+        // std::cout << "Matrix constructor1\n";
         static_assert(sizeof...(args) == ROW * COL, "The number of arguments must be equal to the size of the Matrix.");
-        std::cout << "Matrix constructor1\n";
     }
 
     /**
@@ -49,7 +49,7 @@ public:
      * @note Matrix<3, 3> v33_0();
      */
     explicit Matrix<ROW, COL>() {
-        std::cout << "Matrix constructor0\n";
+        // std::cout << "Matrix constructor0\n";
         static_assert(ROW > 0 && COL > 0, "Matrix dimensions must be greater than zero.");
     }
 
@@ -59,7 +59,7 @@ public:
      * @return
      * @note int numberOfElement = m33_0.size();
      */
-    size_t size() const {
+    size_t Size() const {
         return ROW * COL;
     }
 
@@ -69,7 +69,7 @@ public:
      * @return
      * @note int numberOFRow = m33_0.sizeRow();
      */
-    size_t sizeRow() const {
+    size_t SizeRow() const {
         return ROW;
     }
 
@@ -79,7 +79,7 @@ public:
      * @return
      * @note int numberOfCol = m33_0.sizeCOL();
      */
-    size_t sizeCol() const {
+    size_t SizeCol() const {
         return COL;
     }
 
@@ -87,8 +87,8 @@ public:
      * @brief
      * @note m33_0.clear();
      */
-    void clear() {
-        std::cout << "Matrix clear\n";
+    void Clear() {
+        // std::cout << "Matrix clear\n";
         for (std::size_t i = 0; i < ROW * COL; i++)
             this->v_[i] = 0.0;
     }
@@ -99,8 +99,8 @@ public:
      * @param value
      * @note m33_0.set(3.0);
      */
-    void set(const double& value) {
-        std::cout << "Matrix set " << value << "\n";
+    void Set(const double& value) {
+        // std::cout << "Matrix set " << value << "\n";
         for (std::size_t i = 0; i < ROW * COL; i++)
             this->v_[i] = value;
     }
@@ -142,7 +142,7 @@ public:
      * @param values
      * @note m22_0.update({0.0, 1.0, 2.0, 3.0});
      */
-    void update(std::initializer_list<double> values) {
+    void Update(std::initializer_list<double> values) {
         std::cout << "Matrix update using initializer_list\n";
         if (values.size() != ROW * COL)
             throw std::invalid_argument("Initializer list must have exactly " + std::to_string(ROW * COL) + " elements.");
@@ -157,7 +157,7 @@ public:
      * @note m22_0.update(0.0, 1.0, 2.0, 3.0);
      */
     template<typename... Args>
-    void update(Args... args) {
+    void Update(Args... args) {
         std::cout << "Matrix update using template\n";
         static_assert(sizeof...(args) == ROW * COL, "The number of arguments must be equal to the size of the Matrix.");
         v_ = {args...};
@@ -185,7 +185,7 @@ public:
         static_assert(ROW == COL, "Transopse in place is only applicable to square matrix.");
         for (std::size_t i = 0; i < ROW; i++)
             for (std::size_t j = i + 1; j < COL; j++) {
-                std::cout << "(i, j) = " << "(" << i << ", " << j << ")\n";
+                // std::cout << "(i, j) = " << "(" << i << ", " << j << ")\n";
                 std::swap((*this)(i, j), (*this)(j, i));
             }
     }
@@ -202,7 +202,7 @@ public:
      */
     template <std::size_t o_row, std::size_t o_col>
     Matrix<ROW, COL> operator+(const Matrix<o_row, o_col> &other) const {
-        std::cout << "matrix operator +\n";
+        // std::cout << "matrix operator +\n";
         static_assert(ROW == o_row && COL == o_col, "Matrix dimensions must match for addition");
         Matrix<ROW, COL> result;
         for (std::size_t i = 0; i < ROW; i++)
@@ -222,7 +222,7 @@ public:
      */
     template <std::size_t o_row, std::size_t o_col>
     Matrix<ROW, COL> operator-(const Matrix<o_row, o_col> &other) const {
-        std::cout << "matrix operator -\n";
+        // std::cout << "matrix operator -\n";
         static_assert(ROW == o_row && COL == o_col, "Matrix dimensions must match for addition");
         Matrix<ROW, COL> result;
         for (std::size_t i = 0; i < ROW; i++)
@@ -244,7 +244,7 @@ public:
     template <std::size_t o_row, std::size_t o_col>
     Matrix<ROW, o_col> operator*(const Matrix<o_row, o_col>& other) const {
         static_assert(COL == o_row, "Matrix dimensions must match for multiplication.");
-        if (COL != other.sizeRow())
+        if (COL != other.SizeRow())
             throw std::invalid_argument("Matrix dimensions must match for multiplication.");
 
         Matrix<ROW, o_col> result;
@@ -291,7 +291,7 @@ public:
     template <std::size_t o_row, std::size_t o_col>
     [[deprecated("Matrix multiplication does not support the *= operator.")]]
     Matrix<ROW, o_col>& operator*=(const Matrix<o_row, o_col>& other) {
-        std::cout << "matrix ooperator *=\n";
+        // std::cout << "matrix ooperator *=\n";
         ErrorMessage err;
         throw std::runtime_error(err.createErrorMessage("Matrix multiplication does not support the *= operator.", __FILE__, __LINE__));
         if (COL != other.getRowSize())
@@ -339,7 +339,7 @@ public:
      */
     template <std::size_t o_row, std::size_t o_col>
     Matrix<ROW, COL>& operator+=(const Matrix<o_row, o_col> &m) {
-        std::cout << "matrix operator +=\n" << std::endl;
+        // std::cout << "matrix operator +=\n" << std::endl;
         static_assert(ROW == o_row && COL == o_col, "Matrix dimensions must match for addition");
         for (std::size_t i = 0; i < ROW; i++)
             for (std::size_t j = 0; j < COL; j++)
@@ -359,7 +359,7 @@ public:
      */
     template <std::size_t o_row, std::size_t o_col>
     Matrix<ROW, COL>& operator-=(const Matrix<o_row, o_col> &m) {
-        std::cout << "matrix operator -=\n" << std::endl;
+        // std::cout << "matrix operator -=\n" << std::endl;
         static_assert(ROW == o_row && COL == o_col, "Matrix dimensions must match for addition");
         for (std::size_t i = 0; i < ROW; i++)
             for (std::size_t j = 0; j < COL; j++)
@@ -468,7 +468,7 @@ public:
      *
      * @param os
      */
-    void write_to(std::ostream &os) const {
+    void WriteTo(std::ostream &os) const {
         // save the current format flags
         std::ios_base::fmtflags originalFlags = os.flags();
         std::streamsize originalPrecision = os.precision();
@@ -508,7 +508,7 @@ private:
      * @note called from a member function with the const modifier.
      */
     template <std::size_t N>
-    inline double mult_row(const std::size_t& i, const Array<N>& arr) const {
+    inline double MultRow(const std::size_t& i, const Array<N>& arr) const {
         double ret = 0.0;
         for (std::size_t j = 0; j < N; j++)
             ret += (*this)(i, j) * arr[j];
@@ -532,7 +532,7 @@ public:
         
         Array<ROW> result;
         for (std::size_t i = 0; i < ROW; i++)
-            result[i] = mult_row(i, arr);
+            result[i] = MultRow(i, arr);
         return result;
     }
 
@@ -603,9 +603,9 @@ inline static Matrix<ROW, COL> operator*(const double &s, const Matrix<ROW, COL>
 }
 
 template <std::size_t o_col, std::size_t ROW, std::size_t COL>
-inline static double mult_col(const std::size_t& j, const Array<o_col>& arr, const Matrix<ROW, COL>& mat) {
+inline static double MultCol(const std::size_t& j, const Array<o_col>& arr, const Matrix<ROW, COL>& mat) {
     double ret = 0.0;
-    for (std::size_t row = 0; row < mat.sizeRow(); row++)
+    for (std::size_t row = 0; row < mat.SizeRow(); row++)
         ret += arr[row] * mat(row, j);
     return ret;
 }
@@ -625,10 +625,10 @@ inline static double mult_col(const std::size_t& j, const Array<o_col>& arr, con
 template <std::size_t o_col, std::size_t ROW, std::size_t COL>
 inline static Array<COL> operator*(const Array<o_col>& arr, const Matrix<ROW, COL>& mat) {
     static_assert(o_col == ROW, "Array and Matrix multiplication must match for vector size and matrix row");
-    std::cout << "operator* array and matrix multiplicatoin\n";
+    // std::cout << "operator * array and matrix multiplicatoin\n";
     Array<COL> result;
-    for (std::size_t j = 0; j < mat.sizeCol(); j++) {
-       result[j] = mult_col(j, arr, mat); 
+    for (std::size_t j = 0; j < mat.SizeCol(); j++) {
+       result[j] = MultCol(j, arr, mat); 
     }
     return result;
 }
@@ -647,7 +647,7 @@ inline static Array<COL> operator*(const Array<o_col>& arr, const Matrix<ROW, CO
  */
 template <std::size_t ROW, std::size_t COL>
 inline static std::ostream &operator<<(std::ostream &os, const Matrix<ROW, COL> &mat) {
-    mat.write_to(os);
+    mat.WriteTo(os);
     return os;
 }
 

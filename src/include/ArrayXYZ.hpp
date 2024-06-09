@@ -59,7 +59,7 @@ public:
      * @param z double z component
      * @return none
     */
-    void set(double x, double y, double z) {
+    void Set(double x, double y, double z) {
         x_ = x;
         y_ = y;
         z_ = z;
@@ -192,6 +192,10 @@ public:
      * @return ArrayXYZ object
      */
     ArrayXYZ &operator=(const ArrayXYZ &o) {
+        // self assignment check
+        if (this == &o)
+            return *this;
+
         x_ = o.x_;
         y_ = o.y_;
         z_ = o.z_;

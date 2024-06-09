@@ -34,8 +34,8 @@ public:
      */
     template<typename... Args>
     explicit Array<N>(Args... args) : v_{{args...}} {
+        // std::cout << "Array constructor 1\n";
         static_assert(sizeof...(args) == N, "The number of arguments must be equal to the size of the Array.");
-        std::cout << "Array constructor 1\n";
     }
 
     /**
@@ -44,7 +44,7 @@ public:
      * @note Array<3> a3_0;
      */
     explicit Array<N>() {
-        std::cout << "Array constructor 0\n";
+        // std::cout << "Array constructor 0\n";
         static_assert(N > 0, "Array dimensions must be greater than zero.");
     }
 
@@ -54,7 +54,7 @@ public:
      * @return size_t
      * @note size_t a30Size = a3_0.size();
      */
-    size_t size() const {
+    std::size_t Size() const {
         return N;
     }
 
@@ -62,8 +62,8 @@ public:
      * @brief Set all elements to 0.0.
      * @note a3.clear();
      */
-    void clear() {
-        std::cout << "Array clear\n";
+    void Clear() {
+        // std::cout << "Array clear\n";
         for (std::size_t i = 0; i < N; i++)
             this->v_[i] = 0.0;
     }
@@ -76,7 +76,7 @@ public:
      * @return
      * @note a3[2] = 5.0;
      */
-    double &operator[](size_t i) {
+    double &operator[](std::size_t i) {
         if (i < 0 || i >= N)
             throw std::out_of_range("Array index out of range.");
         return v_[i];
@@ -90,7 +90,7 @@ public:
      * @return
      * @note duuble balue = a3[2];;
      */
-    double operator[](size_t i) const {
+    double operator[](std::size_t i) const {
         if (i < 0 || i >= N)
             throw std::out_of_range("Array index out of range.");
         return v_[i];
@@ -175,7 +175,7 @@ public:
     template <std::size_t M>
     Array<N> operator+(const Array<M>& other) const {
         static_assert(N == M, "Cannot add Arrays of different dimensions.");
-        std::cout << "Array operator +\n";
+        // std::cout << "Array operator +\n";
         Array<N> result;
         for (std::size_t i = 0; i < N; i++)
             result[i] = this->v_[i] + other[i];
@@ -194,7 +194,7 @@ public:
     template <std::size_t M>
     Array<N> operator-(const Array<M>& other) const {
         static_assert(N == M, "Cannot subtract Arrays of different dimensions.");
-        std::cout << "Array operator -\n";
+        // std::cout << "Array operator -\n";
         Array<N> result;
         for (std::size_t i = 0; i < N; i++)
             result[i] = this->v_[i] - other[i];
@@ -223,7 +223,7 @@ public:
     template <std::size_t M>
     double operator*(const Array<M>& other) const {
         static_assert(N == M, "Cannot subtract Arrays of different dimensions.");
-        std::cout << "Array operator *\n";
+        // std::cout << "Array operator *\n";
         double value = 0.0;
         for (std::size_t i = 0; i < N; i++)
             value += this->v_[i] * other[i];
@@ -242,7 +242,7 @@ public:
     template <std::size_t M>
     Array<N>& operator+=(const Array<M>& other) {
         static_assert(N == M, "Cannot add Arrays of different dimensions.");
-        std::cout << "Array operator+=\n";
+        // std::cout << "Array operator +=\n";
         for (std::size_t i = 0; i < N; i++)
             this->v_[i] += other[i];
         return *this;
@@ -260,7 +260,7 @@ public:
     template <std::size_t M>
     Array<N>& operator-=(const Array<M>& other) {
         static_assert(N == M, "Cannot subtract Arrays of different dimensions.");
-        std::cout << "Array operator-=\n";
+        // std::cout << "Array operator -=\n";
         for (std::size_t i = 0; i < N; i++)
             this->v_[i] -= other[i];
         return *this;
@@ -278,7 +278,7 @@ public:
     template <std::size_t M>
     Array<N>& operator*=(const Array<M>& other) {
         static_assert(N == M, "Cannot subtract Arrays of different dimensions.");
-        std::cout << "Array operator-=\n";
+        // std::cout << "Array operator -=\n";
         for (std::size_t i = 0; i < N; i++)
             this->v_[i] *= other[i];
         return *this;
@@ -293,7 +293,7 @@ public:
      * @note a3_2 = a3_1 + 5.0;
      */
     Array<N> operator+(const double scalar) const {
-        std::cout << "Arary operator + scala\n";
+        // std::cout << "Arary operator + scalar\n";
         Array<N> result;
         for (std::size_t i = 0; i < N; i++)
             result[i] = this->v_[i] + scalar;
@@ -309,7 +309,7 @@ public:
      * @note a3_2 = a3_1 - 5.0;
      */
     Array<N> operator-(const double scalar) const {
-        std::cout << "Array operator - scalar\n";
+        // std::cout << "Array operator - scalar\n";
         Array<N> result;
         for (std::size_t i = 0; i < N; i++) 
             result[i] = this->v_[i] - scalar;
@@ -325,7 +325,7 @@ public:
      * @note a3_2 = a3_1 * 5.0;
      */
     Array<N> operator*(const double& scalar) const {
-        std::cout << "Array operator * scalar\n";
+        // std::cout << "Array operator * scalar\n";
         Array<N> result;
         for (std::size_t i = 0; i < N; i++)
             result[i] = this->v_[i] * scalar;
@@ -341,7 +341,7 @@ public:
      * @note a3_1 += 5.0;
      */
     Array<N>& operator+=(const double& scalar) {
-        std::cout << "Array operator += scalar\n";
+        // std::cout << "Array operator += scalar\n";
         for (std::size_t i = 0; i < N; i++)
             this->v_[i] += scalar;
         return *this;
@@ -356,7 +356,7 @@ public:
      * @note a3_1 -= 5.0;
      */
     Array<N>& operator-=(const double& scalar) {
-        std::cout << "Array operator -= scalar\n";
+        // std::cout << "Array operator -= scalar\n";
         for (std::size_t i = 0; i < N; i++)
             this->v_[i] -= scalar;
         return *this;
@@ -371,31 +371,10 @@ public:
      * @note a3_1 *= 5.0;
      */
     Array<N>& operator*=(const double& scalar) {
-        std::cout << "Array operator -= scalar\n";
+        // std::cout << "Array operator -= scalar\n";
         for (std::size_t i = 0; i < N; i++)
             this->v_[i] *= scalar;
         return *this;
-    }
-
-    void Test(double input) const {
-        std::cout << "input = " << input << std::endl;
-        std::cout << "test" << std::endl;
-    }
-
-    void Test() const {
-        std::cout << "test" << std::endl;
-    }
-
-    void TestTest() const {
-        std::cout << "testtest" << std::endl;
-    }
-
-    void TT() const {
-        std::cout << "tt" << std::endl;
-    }
-    
-    void TTT() const {
-        std::cout << "ttt" << std::endl;
     }
 
     /**
@@ -459,7 +438,7 @@ public:
      *
      * @param os
      */
-    void write_to(std::ostream &os) const {
+    void WriteTo(std::ostream &os) const {
         // save the current format flags
         std::ios_base::fmtflags originalFlags = os.flags();
         std::streamsize originalPrecision = os.precision();
@@ -512,7 +491,7 @@ inline static Array<N> operator*(const double &s, const Array<N>& arr) {
  */
 template <std::size_t N>
 inline static std::ostream &operator<<(std::ostream &os, const Array<N> &arr) {
-    arr.write_to(os);
+    arr.WriteTo(os);
     return os;
 }
 
