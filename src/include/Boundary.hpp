@@ -1,8 +1,9 @@
-#ifndef _BOUNDARY_H_
-#define _BOUNDARY_H_
+#ifndef _BOUNDARY_HPP_
+#define _BOUNDARY_HPP_
+
+#include "Node.hpp"
 
 #include <vector>
-#include "Node.h"
 
 /**
  * @brief class that holds the definition of the boundary conditions
@@ -24,36 +25,32 @@ class Boundary {
 
 private:
 
-
+    std::vector<Node*> nodes_;
 
 public:
 
     //! Whether to set x, y and z boundary conditions
     //! 0: not set, 1: set
-    int exist_of_x_boundary_;
-    int exist_of_y_boundary_;
-    int exist_of_z_boundary_;
+    std::size_t exist_of_x_boundary_ = 0;
+    std::size_t exist_of_y_boundary_ = 0;
+    std::size_t exist_of_z_boundary_ = 0;
 
     double a0_, a1_, a2_, a3_, a4_, a5_;
     double b0_, b1_, b2_, b3_, b4_, b5_;
     double c0_, c1_, c2_, c3_, c4_, c5_;
 
-    std::vector<Node *> nodes_;
-
     /**
      * @brief add Nodes to boundary
      * @param node 
      */
-    void addNode(Node *node) {
-        nodes_.push_back(node);
-    }
+    void AddNode(Node* node);
 
     /**
      * @fn
      * @brief 
      * @param c 
      */
-    void apply(double c);
+    void Apply(double c);
 };
 
-#endif // _BOUNDARY_H_
+#endif // _BOUNDARY_HPP_
