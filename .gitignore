@@ -33,6 +33,8 @@
 
 build/*
 docs/*
+data/*
+.gmsh/*
 
 .cache/*
 .tags/*
