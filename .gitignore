@@ -39,3 +39,5 @@ data/*
 .cache/*
 .tags/*
 .tags
+
+output/*
