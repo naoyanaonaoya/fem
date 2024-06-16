@@ -20,9 +20,9 @@ private:
 
 public:
 
-    ~TestBase();
-
     TestBase();
+
+    ~TestBase();
 
     static void setOut(std::ostream *pout);
 

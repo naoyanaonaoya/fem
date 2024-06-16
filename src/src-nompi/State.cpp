@@ -30,7 +30,7 @@ void State::RecordStartTime() {
     start_time_point_system_ = std::chrono::system_clock::now();
 
     time_stamp = std::chrono::system_clock::to_time_t(start_time_point_system_);
-    std::cout << std::ctime(&time_stamp) << std::endl;
+    std::cout << "start time = " << std::ctime(&time_stamp) << std::endl;
 }
 
 void State::MeasureElapsedTime() {

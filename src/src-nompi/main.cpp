@@ -57,17 +57,25 @@ int main(int argc, char *argv[]) {
     if (!args.analyze(argc, argv))
         return EXIT_FAILURE;
 
-    try {
+    std::cout << "test0" << "\n";
+    // return EXIT_SUCCESS;
 
+    try {
         driver_sp.Init(num_procs, rank, args.case_file_name_.c_str());
+        std::cout << "test1" << "\n";
         Params* params = driver_sp.GetParams();
+        std::cout << "test2" << "\n";
         params->is_restart_mode_ = args.is_restart_mode_;
         params->is_single_process_mode_ = true;
         driver_sp.ReadDataFile();
+        std::cout << "test3" << "\n";
         driver_sp.CalcInvariants();
         driver_sp.SetupFieldData();
 
+        std::cout << "test1" << "\n";
+    
         driver_sp.PrintCalcCondition();
+        // return EXIT_SUCCESS;
         /*
          * 時間発展ループ
          */

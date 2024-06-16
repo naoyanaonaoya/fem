@@ -46,30 +46,30 @@ void Node::CopyElementRefsFrom(const Node &o) {
 }
 
 void Node::AddElementRef(Element *element, int node_index_in_element) {
-    ElementRef *element_ref = this->allocateElementRef();
+    ElementRef* element_ref = AllocateElementRef();
     element_ref->element_ = element;
     element_ref->index_in_element_ = node_index_in_element;
 }
 
-ElementRef* Node::allocateElementRef() {
-    std::cout << "element_ref_num_ = " << this->element_ref_num_ << std::endl;
-    std::cout << "allocateElementRef start" << std::endl;
-    if (this->element_ref_num_ < 4) {
-        std::cout << "this->element_ref_num_ < 4" << std::endl;
-        return &element_refs_[this->element_ref_num_++];
+ElementRef* Node::AllocateElementRef() {
+    // std::cout << "element_ref_num_ = " << this->element_ref_num_ << std::endl;
+    // std::cout << "allocateElementRef start" << std::endl;
+    if (element_ref_num_ < 4) {
+        // std::cout << "element_ref_num_ < 4" << std::endl;
+        return &element_refs_[element_ref_num_++];
     } else {
-        std::cout << "this->element_ref_num_ = 4" << std::endl;
-        ElementRef *new_element_refs = new ElementRef[element_ref_num_ + 1];
+        // std::cout << "element_ref_num_ = 4" << std::endl;
+        ElementRef* new_element_refs = new ElementRef[element_ref_num_ + 1];
         for (int i = 0; i < element_ref_num_; i++)
             new_element_refs[i] = element_refs_[i];
-        std::cout << "delete before" << std::endl;
+        // std::cout << "delete before" << std::endl;
         if (element_ref_num_ > 4)
             delete[] element_refs_;
-        std::cout << "delete after" << std::endl;
+        // std::cout << "delete after" << std::endl;
         element_refs_ = new_element_refs;
         return &new_element_refs[element_ref_num_++];
     }
-    std::cout << "allocateElementRef finish" << std::endl;
+    // std::cout << "allocateElementRef finish" << std::endl;
 }
 
 void Node::UpdateElementRef(Element* element, int node_index_in_element) {
@@ -90,7 +90,7 @@ void Node::GetRanks(std::set<std::size_t> &ranks) const {
 }
 
 void Node::ClearMass() {
-   this->m_ = 0.0;
+   m_ = 0.0;
 }
 
 void Node::CalcMassInv(double delta_t) {

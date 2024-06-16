@@ -9,6 +9,8 @@ int TestBase::test_passed_count_ = 0;
 int TestBase::test_failed_count_ = 0;
 double TestBase::tolerance_ = 1.0e-10;
 
+TestBase::TestBase() {}
+
 TestBase::~TestBase() {
     if (test_failed_count_ == 0) {
         *pout_ << "All tests passed.\n";
@@ -16,8 +18,6 @@ TestBase::~TestBase() {
         *pout_ << "Some tests failed.\n";
     }
 }
-
-TestBase::TestBase() {}
 
 void TestBase::setOut(std::ostream *pout) {
     pout_ = pout;

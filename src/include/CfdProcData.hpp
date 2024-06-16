@@ -20,14 +20,22 @@ private:
     //! all processor Node
     std::vector<Node> all_nodes_;
 
+    std::set<std::size_t> all_nodes_indexes_;
+
     //! my process Node
     std::vector<Node*> my_nodes_;
+
+    std::set<std::size_t> my_nodes_indexes_;
 
     // std::vector<std::unique_ptr<Element>> all_elems_;
     std::vector<ElementQuad> all_elems_;
 
+    std::set<std::size_t> all_elems_indexes_;
+
     // std::vector<std::unique_ptr<Element>*> my_elems_;
     std::vector<ElementQuad*> my_elems_;
+
+    std::set<std::size_t> my_elems_indexes_;
 
     std::vector<Boundary> boundaries_;
 

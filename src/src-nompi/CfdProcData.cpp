@@ -1,13 +1,28 @@
 #include "CfdProcData.hpp"
 
 void CfdProcData::Init(Params* params, State* state, CfdCommData* comm_data) {
+
+#ifdef DEBUG_CFDPROCDATA
+    Logger::out << "CfdProcData::Init:start" << "\n";
+#endif
+
     // Hold in member variables for quick reference when needed
     this->params_ = params;
     this->state_ = state;
     this->comm_data_ = comm_data;
+
+#ifdef DEBUG_CFDPROCDATA
+    Logger::out << "CfdProcData::Init:finish" << "\n";
+#endif
+
 }
 
 void CfdProcData::InitZero() {
+
+#ifdef DEBUG_CFDPROCDATA
+    Logger::out << "CfdProcData::InitZero:start" << "\n";
+#endif
+
     std::size_t number_of_my_nodes = this->my_nodes_.size();
     std::size_t number_of_my_elements = this->my_elems_.size();
 
@@ -20,6 +35,11 @@ void CfdProcData::InitZero() {
     for (std::size_t i = 0; i < number_of_my_elements; i++) {
         this->my_elems_[i]->p_ = 0.0;
     }
+
+#ifdef DEBUG_CFDPROCDATA
+    Logger::out << "CfdProcData::InitZero:finish" << "\n";
+#endif
+
 }
 
 void CfdProcData::CalcInvariants1() {
@@ -73,7 +93,7 @@ void CfdProcData::ApplyBoundaryConditions() {
         boundaries_[i].Apply(c);
     }
 
-    // Logger::out << "c: " << c << std::endl;
+    // Logger::out << "c: " << c << "\n";
 
     // LOG_CFDPRODCATA("applyBoundaryConditions:end");
 }
@@ -145,6 +165,11 @@ void CfdProcData::CalcCourantNumber() {
 }
 
 void CfdProcData::ReadMeshFile() {
+    
+#ifdef DEBUG_CFDPROCDATA
+    Logger::out << "CfdProcData::ReadMeshFile:start" << "\n";
+#endif
+
     FileReader fr;
 
     std::size_t n_procs;
@@ -158,12 +183,17 @@ void CfdProcData::ReadMeshFile() {
     fr.ReadSizeT(n_nodes, "Number of Nodes");
     fr.ReadSizeT(n_elems, "Number of Elements");
 
+    std::cout << "n_procs: " << n_procs << "\n";
+    std::cout << "n_nodes: " << n_nodes << "\n";
+    std::cout << "n_elems: " << n_elems << "\n";
+
     all_nodes_.resize(n_nodes);
-    all_elems_.reserve(n_elems);
+    all_elems_.resize(n_elems);
 
     for (std::size_t i = 0; i < n_nodes; i++) {
         Node* node = &all_nodes_[i];
         node->global_index_ = i;
+        all_nodes_indexes_.insert(i);
         fr.ReadLine();
         fr.ReadExpectedSizeT(i, "Node Index");
         fr.ReadDouble(node->pos_.x_, "X");
@@ -172,6 +202,7 @@ void CfdProcData::ReadMeshFile() {
     }
 
     for (std::size_t i = 0; i < n_elems; i++) {
+        // std::cout << i << "\n";
         Element* elem = &all_elems_[i];
         elem->global_index_ = i;
         // 0-index
@@ -194,9 +225,19 @@ void CfdProcData::ReadMeshFile() {
     }
 
     fr.Close();
+
+#ifdef DEBUG_CFDPROCDATA
+    Logger::out << "CfdProcData::ReadMeshFile:finish" << "\n";
+#endif
+
 }
 
 void CfdProcData::ReadBoundaryFile() {
+
+#ifdef DEBUG_CFDPROCDATA
+    Logger::out << "CfdProcData::ReadBoundaryFile:start" << "\n";
+#endif
+
     FileReader fr;
 
     fr.Open(params_->boundary_file_name_);
@@ -206,27 +247,50 @@ void CfdProcData::ReadBoundaryFile() {
     fr.ReadSizeT(n_boundaries, "Number of Boundaries");
     boundaries_.resize(n_boundaries);
 
+#ifdef DEBUG_CFDPROCDATA
+    Logger::out << "CfdProcData::ReadBoundaryFile:boundaries_.size(): " << boundaries_.size() << "\n";
+#endif
+
+
     for (std::size_t i = 0; i < n_boundaries; i++) {
-        Boundary *bound = &boundaries_[i];
+
+#ifdef DEBUG_CFDPROCDATA
+        Logger::out << "CfdProcData::ReadBoundaryFile:i: " << i << "\n";
+#endif
+
+        Boundary* bound = &boundaries_[i];
         std::size_t n_nodes;
         fr.ReadLine();
         fr.ReadExpectedSizeT(i, "Boundary Index");
         fr.ReadSizeT(n_nodes, "Number of Nodes");
+
+        fr.ReadLine();
         fr.ReadSizeT(bound->exist_of_x_boundary_, "Exist of X Boundary");
         fr.ReadSizeT(bound->exist_of_y_boundary_, "Exist of Y Boundary");
         fr.ReadSizeT(bound->exist_of_z_boundary_, "Exist of Z Boundary");
+
+#ifdef DEBUG_CFDPROCDATA
+        Logger::out << "CfdProcData::ReadBoundaryFile:exist_of_x_boundary_: " << bound->exist_of_x_boundary_ << "\n";
+        Logger::out << "CfdProcData::ReadBoundaryFile:exist_of_y_boundary_: " << bound->exist_of_y_boundary_ << "\n";
+        Logger::out << "CfdProcData::ReadBoundaryFile:exist_of_z_boundary_: " << bound->exist_of_z_boundary_ << "\n";
+#endif
+        
+        
         fr.ReadLine();
         for (std::size_t j = 0; j < n_nodes; j++) {
+
             std::size_t node_index;
-            fr.ReadSizeT(node_index, "Node Index");
+            fr.ReadSizeT(node_index, "Boundary Node Index");
 
             bool is_exist = false;
             std::size_t n_nodes = my_nodes_.size();
-            for (std::size_t k = 0; k < n_nodes; k++)
-                if(my_nodes_[i]->global_index_ == node_index) {
-                    is_exist = true;
-                    break;
-                }
+            if (all_nodes_indexes_.find(node_index) != all_nodes_indexes_.end())
+                is_exist = true;
+            // for (std::size_t k = 0; k < n_nodes; k++)
+            //     if(my_nodes_[k]->global_index_ == node_index) {
+            //         is_exist = true;
+            //         break;
+            //     }
 
             if (is_exist == true)
                 bound->AddNode(&all_nodes_[node_index]);
@@ -256,6 +320,11 @@ void CfdProcData::ReadBoundaryFile() {
     }
 
     fr.Close();
+
+#ifdef DEBUG_CFDPROCDATA
+    Logger::out << "CfdProcData::ReadBoundaryFile:finish" << "\n";
+#endif
+
 }
 
 void CfdProcData::FindOwnData() {
@@ -291,22 +360,55 @@ void CfdProcData::FindOwnData() {
 }
 
 void CfdProcData::WriteMeshFile() {
-    
+
+#ifdef DEBUG_CFDPROCDATA
+    Logger::out << "CfdProcData::WriteMeshFile:start" << "\n";
+#endif
+
+    std::size_t rank = params_->my_rank_;
+    std::size_t step = state_->GetRound();
+    char buf[1024];
+    int snprintf_result = snprintf(buf, sizeof(buf), params_->output_file_name_pattern_.c_str(), rank, step);
+    fw_.WriteVtkCfdProcData(buf, my_nodes_, my_elems_);
+
+#ifdef DEBUG_CFDPROCDATA
+    Logger::out << "CfdProcData::WriteMeshFile:finish" << "\n";
+#endif
 }
 
 void CfdProcData::ReadRestartFile() {
+
+#ifdef DEBUG_CFDPROCDATA
+    Logger::out << "CfdProcData::ReadRestartFile:start" << "\n";
+#endif
+
     std::size_t rank = params_->my_rank_;
     std::size_t step = state_->GetRound();
     char buf[1024];
     snprintf(buf, sizeof(buf), params_->restart_file_name_pattern_.c_str(), rank);
     fr_.ReadBinaryCfdProcData(buf, my_nodes_, my_elems_, step);
     state_->ResetRestart(params_->delta_t_, step);
+
+#ifdef DEBUG_CFDPROCDATA
+    Logger::out << "CfdProcData::ReadRestartFile:finish" << "\n";
+#endif
+
 }
 
 void CfdProcData::WriteRestartFile() {
+
+#ifdef DEBUG_CFDPROCDATA
+    Logger::out << "CfdProcData::WriteRestartFile:start" << "\n";
+#endif
+
     std::size_t rank = params_->my_rank_;
     std::size_t step = state_->GetRound();
     char buf[1024];
-    snprintf(buf, sizeof(buf), params_->restart_file_name_pattern_.c_str(), rank);
-    fw_.WriteBinaryCfdProcData(buf, my_nodes_, my_elems_, step);
+    snprintf(buf, sizeof(buf), params_->restart_file_name_pattern_.c_str(), rank, step);
+    fw_.WriteBinaryCfdProcData(buf, my_nodes_, my_elems_);
+
+#ifdef DEBUG_CFDPROCDATA
+    Logger::out << "CfdProcData::WriteRestartFile:finish" << "\n";
+#endif
+
 }

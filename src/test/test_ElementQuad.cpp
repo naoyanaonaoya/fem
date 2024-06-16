@@ -179,7 +179,7 @@ void TestElementQuad::outputVtk() {
     for (int i = 0; i < 4; i++) {
         tnodes[i] = &nodes_[i];
     };
-    std::vector<Element*> telems(1);
+    std::vector<ElementQuad*> telems(1);
     for (int i = 0; i < 1; i++) {
         telems[i] = &elem_;
     }
@@ -189,7 +189,7 @@ void TestElementQuad::outputVtk() {
     }
 
     FileWriter fr;
-    fr.writeVtkCfdProcData("./test_quad_element.vtk", tnodes, telems);
+    fr.WriteVtkCfdProcData("./test_quad_element.vtk", tnodes, telems);
 }
 
 class TestElementQuad4 : public TestBase {
@@ -294,10 +294,6 @@ void TestElementQuad4::setNodesToElem() {
         for (int x = 0; x < 2; x++) {
             int ei = 2 * y + x;
             int ni = 3 * y + x;
-            std::cout << &nodes_[ni + 0] << std::endl;
-            std::cout << &nodes_[ni + 1] << std::endl;
-            std::cout << &nodes_[ni + 4] << std::endl;
-            std::cout << &nodes_[ni + 3] << std::endl;
             /* counter clockwise になるように注意 */
             elems_[ei].SetNodes(
                 &nodes_[ni + 0],
@@ -491,13 +487,13 @@ void TestElementQuad4::outputVTK() {
     for (std::size_t i = 0; i < tnodes.size(); i++) {
         tnodes[i] = &nodes_[i];
     };
-    std::vector<Element*> telems(4);
+    std::vector<ElementQuad*> telems(4);
     for (std::size_t i = 0; i < telems.size(); i++) {
         telems[i] = &elems_[i];
     }
 
     FileWriter fr;
-    fr.writeVtkCfdProcData("./test_quad_element.vtk", tnodes, telems);
+    fr.WriteVtkCfdProcData("./test_quad_element.vtk", tnodes, telems);
 }
 
 void TestElementQuad::run() {
@@ -527,7 +523,7 @@ void TestElementQuad4::run() {
 
     this->testVelocityPrediction();
     
-    this->outputVTK();
+    // this->outputVTK();
 }
 
 int main(int argc, char *argv[]) {
@@ -539,7 +535,17 @@ int main(int argc, char *argv[]) {
     TestElementQuad4 test4;
     test4.run();
 
+    // Logger::out << "test0" << "\n";
+
+    test4.report();
     Logger::CloseLog();
 
-    return TestBase::report();
+    // Logger::out << "test1" << "\n";
+
+    std::cout << "test4" << std::endl;
+
+
+    std::cout << "test4" << std::endl;
+
+    return 0;
 }

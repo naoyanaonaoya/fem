@@ -9,6 +9,8 @@
 #define _NODE_H_
 
 #include "ArrayXYZ.hpp"
+#include "Logger.hpp"
+
 // #include <algorithm>
 #include <set>
 
@@ -75,11 +77,23 @@ public:
      * @return none
      */
     Node() {
+        // Logger::out << "Node()" << "\n";
         m_ = 0.0;
         m_inv_ = 0.0;
         delta_t_by_m_ = 0.0;
-        this->element_refs_ = &this->element_refs_array_[0];
-        this->element_ref_num_ = 0;
+        element_refs_ = &element_refs_array_[0];
+        element_ref_num_ = 0;
+    }
+
+    Node(double x, double y, double z) {
+        pos_.x_ = x;
+        pos_.y_ = y;
+        pos_.z_ = z;
+        m_ = 0.0;
+        m_inv_ = 0.0;
+        delta_t_by_m_ = 0.0;
+        element_refs_ = &element_refs_array_[0];
+        element_ref_num_ = 0;
     }
 
     /**
@@ -130,7 +144,7 @@ public:
 
 private:
 
-    ElementRef *allocateElementRef();
+    ElementRef* AllocateElementRef();
 
 };
 
