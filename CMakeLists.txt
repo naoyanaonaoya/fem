@@ -1,6 +1,21 @@
 cmake_minimum_required(VERSION 3.10)
 project(fem CXX)
 
+add_custom_target(print_source_dir ALL
+    COMMAND ${CMAKE_COMMAND} -E echo "CMAKE_SOURCE_DIR         : ${CMAKE_SOURCE_DIR}"
+    COMMAND ${CMAKE_COMMAND} -E echo "CMAKE_BINARY_DIR         : ${CMAKE_BINARY_DIR}"
+    COMMAND ${CMAKE_COMMAND} -E echo "CMAKE_BUILD_TYPE         : ${CMAKE_BUILD_TYPE}"
+    COMMAND ${CMAKE_COMMAND} -E echo "CMAKE_CXX_COMPILER       : ${CMAKE_CXX_COMPILER}"
+    COMMAND ${CMAKE_COMMAND} -E echo "CMAKE_CXX_FLAGS          : ${CMAKE_CXX_FLAGS}"
+    COMMAND ${CMAKE_COMMAND} -E echo "CMAKE_INSTALL_PREFIX     : ${CMAKE_INSTALL_PREFIX}"
+    COMMAND ${CMAKE_COMMAND} -E echo "CMAKE_INSTALL_BINDIR     : ${CMAKE_INSTALL_BINDIR}"
+    COMMAND ${CMAKE_COMMAND} -E echo "CMAKE_INSTALL_LIBDIR     : ${CMAKE_INSTALL_LIBDIR}"
+    COMMAND ${CMAKE_COMMAND} -E echo "CMAKE_INSTALL_INCLUDEDIR : ${CMAKE_INSTALL_INCLUDEDIR}"
+    COMMAND ${CMAKE_COMMAND} -E echo "CMAKE_MODULE_PATH        : ${CMAKE_MODULE_PATH}"
+    COMMAND ${CMAKE_COMMAND} -E echo "CMAKE_PREFIX_PATH        : ${CMAKE_PREFIX_PATH}"
+    COMMAND ${CMAKE_COMMAND} -E echo "CMAKE_VERBOSE_MAKEFILE   : ${CMAKE_VERBOSE_MAKEFILE}"
+)
+
 find_package(OpenMP REQUIRED)
 
 include_directories(${CMAKE_SOURCE_DIR}/src/include)
@@ -25,7 +40,8 @@ add_library(fem_base
     src/src-nompi/test.cpp
 )
 
-message(STATUS "CMAKE_SOURCE_DIR: ${CMAKE_SOURCE_DIR}")
+add_definitions(-DDEBUG_CFDPROCDATA)
+add_definitions(-DDEBUG_FILEWRITER)
 
 
 # 'main.cpp'というソースファイルを使用して、'main'という名前の
