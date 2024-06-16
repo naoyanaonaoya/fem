@@ -1,13 +1,24 @@
 #include "Boundary.hpp"
+#include "Logger.hpp"
+
+void Boundary::ResizeNodes(std::size_t size) {
+    nodes_.resize(size);
+}
+
+std::size_t Boundary::GetSizeNodes() {
+    return nodes_.size();
+}
 
 void Boundary::AddNode(Node* node) {
     nodes_.push_back(node);
 }
 
 void Boundary::Apply(double c) {
+
     std::size_t number_of_nodes = nodes_.size();
 
     for (std::size_t i = 0; i < number_of_nodes; i++) {
+
         double x = nodes_[i]->pos_.x_;
         double y = nodes_[i]->pos_.y_;
         double z = nodes_[i]->pos_.z_;

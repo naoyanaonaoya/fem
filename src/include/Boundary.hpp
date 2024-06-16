@@ -39,6 +39,10 @@ public:
     double b0_, b1_, b2_, b3_, b4_, b5_;
     double c0_, c1_, c2_, c3_, c4_, c5_;
 
+    void ResizeNodes(std::size_t size);
+
+    std::size_t GetSizeNodes();
+
     /**
      * @brief add Nodes to boundary
      * @param node 
