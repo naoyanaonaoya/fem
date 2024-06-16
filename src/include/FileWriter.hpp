@@ -25,9 +25,11 @@ private:
 
     int line_no_;
 
-    int pointDataHeader;
+    int point_data_header_;
 
-    int cellDataHeader;
+    int cell_data_header_;
+
+    static int SSSTTTTEEEPPP;
 
 public:
 
@@ -35,11 +37,15 @@ public:
 
     ~FileWriter();
 
-    void open(const char *file_name);
+    void Open(const char *file_name);
 
-    void open(const std::string &file_name);
+    void Open(const std::string &file_name);
 
-    void close();
+    void OpenBin(const char *file_name);
+
+    void OpenBin(const std::string &file_name);
+
+    void Close();
 
     /**
      * @fn
@@ -47,74 +53,51 @@ public:
      * @param val
      * @param label
      */
-    void writeInt(const int &val, const char *label);
+    void WriteInt(const int &val, const char *label);
 
-    void writeVtkCfdProcData(const char *file_name, const std::vector<Node *> &my_nodes, const std::vector<Element *> &my_elemes);
+    void WriteVtkCfdProcData(const char *file_name, const std::vector<Node *> &my_nodes, const std::vector<ElementQuad*> &my_elemes);
 
-    void writeVtkCfdProcData(const std::string &file_name, const std::vector<Node *> &my_nodes, const std::vector<Element *> &my_elemes);
+    void WriteVtkCfdProcData(const std::string &file_name, const std::vector<Node *> &my_nodes, const std::vector<ElementQuad*> &my_elemes);
 
-    void writeVtkCfdProcDataOnlyMesh(const char *file_name, const std::vector<Node *> &my_nodes, const std::vector<Element *> &my_elemes);
+    void WriteVtkCfdProcDataOnlyMesh(const char *file_name, const std::vector<Node *> &my_nodes, const std::vector<ElementQuad*> &my_elemes);
 
-    void writeVtkCfdProcDataOnlyMesh(const std::string &file_name, const std::vector<Node *> &my_nodes, const std::vector<Element *> &my_elemes);
+    void WriteVtkCfdProcDataOnlyMesh(const std::string &file_name, const std::vector<Node *> &my_nodes, const std::vector<ElementQuad*> &my_elemes);
 
-    void writeVtkDataFileVersion();
+    void WriteVtkDataFileVersion();
 
-    void writeVtkHeader();
+    void WriteVtkHeader();
 
-    void writeVtkAsciiKeyword();
+    void WriteVtkAsciiKeyword();
 
-    void writeVtkDatasetUnstructuredGrid();
+    void WriteVtkDatasetUnstructuredGrid();
 
-    void writeVtkPointsHeader(const std::vector<Node *> &my_nodes);
+    void WriteVtkPointsHeader(const std::vector<Node *> &my_nodes);
 
-    void writeVtkPoints(const std::vector<Node> &nodes);
+    void WriteVtkPoints(const std::vector<Node> &nodes);
 
-    void writeVtkPoints(const std::vector<Node *> &my_nodes);
+    void WriteVtkPoints(const std::vector<Node *> &my_nodes);
 
-    void writeVtkCellsHeader(const int &num_cells);
+    void WriteVtkCellsHeader(const int &num_cells);
 
-    void writeVtkCellsHeader(const std::vector<Element *> &my_elems);
+    void WriteVtkCellsHeader(const std::vector<ElementQuad*> &my_elems);
 
-    void writeVtkCells(const std::vector<Element *> &my_elems);
+    void WriteVtkCells(const std::vector<ElementQuad*> &my_elems);
 
-    void writeVtkCellTypesHeader(const std::vector<Element *> &my_elems);
+    void WriteVtkCellTypesHeader(const std::vector<ElementQuad*> &my_elems);
 
-    void writeVtkCellsTypes(const std::vector<Element *> &my_elems);
+    void WriteVtkCellsTypes(const std::vector<ElementQuad*> &my_elems);
 
-    void writeVtkPointsVelocityHeader(const std::vector<Node*> &my_nodes);
+    void WriteVtkPointsVelocityHeader(const std::vector<Node*> &my_nodes);
 
-    void writeVtkPointsVelocity(const std::vector<Node*> &my_nodes);
+    void WriteVtkPointsVelocity(const std::vector<Node*> &my_nodes);
 
-    void writeVtkPointsMassHeader(const std::vector<Node*> &my_nodes);
+    void WriteVtkPointsMassHeader(const std::vector<Node*> &my_nodes);
 
-    void writeVtkPointsMass(const std::vector<Node*> &my_nodes);
+    void WriteVtkPointsMass(const std::vector<Node*> &my_nodes);
 
-    void WriteBinaryCfdProcData(const std::string &file_name, const std::vector<Node*> &my_nodes, const std::vector<ElementQuad*> &my_elems, const int &step) {
-        WriteBinaryCfdProcData(file_name.c_str(), my_nodes, my_elems, step);
-    }
+    void WriteBinaryCfdProcData(const char *file_name, const std::vector<Node*> &my_nodes, const std::vector<ElementQuad*> &my_elems);
 
-    void WriteBinaryCfdProcData(const char *file_name, const std::vector<Node*> &my_nodes, const std::vector<ElementQuad*> &my_elems, const int &step) {
-        file_name_ = file_name;
-        out_.open(file_name, std::ios::out | std::ios::binary);
-
-        std::size_t n_my_nodes = my_nodes.size();
-        std::size_t n_my_elems = my_elems.size();
-        out_.write((char*)&step, sizeof(std::size_t));
-        out_.write((char*)&n_my_nodes, sizeof(std::size_t));
-        out_.write((char*)&n_my_elems, sizeof(std::size_t));
-
-        for (std::size_t i = 0; i < n_my_nodes; i++) {
-            out_.write((char*)&my_nodes[i]->local_index_, sizeof(std::size_t));
-            out_.write((char*)&my_nodes[i]->vel_.x_, sizeof(double));
-            out_.write((char*)&my_nodes[i]->vel_.y_, sizeof(double));
-            out_.write((char*)&my_nodes[i]->vel_.z_, sizeof(double));
-        }
-
-        for (std::size_t i = 0; i < n_my_elems; i++) {
-            out_.write((char*)&my_elems[i]->global_index_, sizeof(int));
-            out_.write((char*)&my_elems[i]->p_, sizeof(double));
-        }
-    }
+    void WriteBinaryCfdProcData(const std::string &file_name, const std::vector<Node *> &my_nodes, const std::vector<ElementQuad*> &my_elems);
 };
 
 #endif // _FILEWRITER_H_

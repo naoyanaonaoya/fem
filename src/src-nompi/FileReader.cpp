@@ -5,7 +5,9 @@
  * @fn
  * @brief Construct a new File Reader:: File Reader object
  */
-FileReader::FileReader() {}
+FileReader::FileReader() {
+    std::cout << "FileReader constructor" << "\n";
+}
 
 /**
  * @fn
