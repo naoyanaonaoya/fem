@@ -1,3 +1,12 @@
+# Introduction
+
+This is computational fluid dynamics engine base on Finite Element Method (FEM).
+
+![cavity flow](./images/2d_cavity_Re200_velocity.png "cavity")
+![karman flow](./images/karman-vortex-Re150.png "karman-flow")
+
+## memo
+
 ```bash
 cmake -S . -B ./build -DCMAKE_CXX_COMPILER=mpic++ -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 ```
@@ -10,5 +19,5 @@ cmake -S . -B ./build -DCMAKE_CXX_COMPILER=mpic++ -DCMAKE_BUILD_TYPE=Debug -DCMA
   - MPIを使用する場合、C++コンパイラを指定する。この場合、mpic++を指定している
 - -DCMAKE_BUILD_TYPE=Debug
   - ビルドタイプを指定する。この場合、デバッグビルドを指定している。最適化が無効化され、デバッグ情報が付加される
-- -DCMAKE_EXPORT_COMPILE_COMMANDS=ON 
+- -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
   - vimのaleにおいて、includeファイルの場所を特定するために必要
